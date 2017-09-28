@@ -5,37 +5,9 @@
 /* Student ID: 0333120 */
 /*------------------------------------------------------------------- */
 
-// ------------------------------------
-// Fast Food Ordering System
-// ------------------------------------
-// 1. Purchase
-// 2. Edit Meal
-// 3. Add Meal
-// 4. Delete Meal
-// 5. Show Available Meal 
-// 6. Show daily transaction
-// 7. Exit
-
-// void introduction()
-// {
-//     printf("Hi\n");
-//     printf("My name is Chaitanya\n");
-//     printf("How are you?");
-//      There is no return statement inside this function, since its
-//      * return type is void
-     
-// }
-
-// int main()
-// {
-//      /*calling function*/
-//      introduction();
-//      return 0;
-// }
-
 #include <stdio.h>
 
-int order(), show_meals();
+int order(), show_meals(), purchase_meal();
 
 int main() {	
 	order();
@@ -44,7 +16,7 @@ int main() {
 
 int order() {
 
-	int order_number; //declared variable to store values
+	int order_number; //declared variable to store order values
 
 	puts("------------------------------------");
 	puts("Fast Food Ordering System");
@@ -53,7 +25,7 @@ int order() {
 	puts("2. Edit Meal");
 	puts("3. Add Meal");
 	puts("4. Delete Meal");
-	puts("5. Show Available Meal ");
+	puts("5. Show Available Meals");
 	puts("6. Show daily transaction");
 	puts("7. Exit");
 
@@ -61,6 +33,7 @@ int order() {
 
 	switch(order_number) {
 		case 1:
+			purchase_meal();
 			printf("Purchase!\n");
 			break;
 		case 2:
@@ -73,11 +46,10 @@ int order() {
 			printf("This option allows user to delete meals!\n");
 			break;
 		case 5:
-			printf("Available meals!");
-			// return show_meals();
+			show_meals();						
 			break;		
 		case 6:
-			printf("Daily transactions!");
+			printf("Daily transactions!\n");
 			break;
 			// Total combo meal transaction
 			// Total ala-carte transaction
@@ -98,24 +70,41 @@ int order() {
 }
 
 //create function to purchase a meal
-// int purchase_meal() {
+int purchase_meal() {
 
 
-// }
+}
 
+//create function to display all combo meals available
 int show_meals() {
-	int num;
-	FILE *fptr;
-	if ((fopen("/combo.txt","r+")) == NULL) {
-		printf("Error in opening file.\n");		
-	}
-		
-   fscanf(fptr,"%d", &num);
 
-   printf("Value of n = %d", num);
-   fclose(fptr); 
-  
+   FILE *fp;
+   char text_file[250];
+
+   fp = fopen("combo.txt", "r"); //opens txt file and READS only
+
+   puts("----------------------------------------------");
+   puts("HERE ARE THE COMBO MEALS:");
+   puts("----------------------------------------------");
+
+   fgets(text_file, 250, (FILE*)fp);
+   printf("%s\n", text_file );
+
+   fgets(text_file, 250, (FILE*)fp);
+   printf("%s\n", text_file );
+   
+   fgets(text_file, 250, (FILE*)fp);
+   printf("%s\n", text_file );
+
+   fgets(text_file, 250, (FILE*)fp);
+   printf("%s\n", text_file );
+
+   fgets(text_file, 250, (FILE*)fp);
+   printf("%s\n", text_file );
+
+   fclose(fp); //close the file
    return 0;
+
 }
 
 // int daily_transactions() {
