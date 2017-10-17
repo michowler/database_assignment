@@ -1,0 +1,8 @@
+A0001;Soft drink;3.99;3
+A0002;Salad;3.99;6
+A0003;Burger;6.99;200
+A0004;Fried chicken 1 piece;4.99;214
+A0005;Fried chicken 2 pieces;8.99;124A0001;Soft drink;3.99;3
+A0004;Fried chicken 1 piece;4.99;2
+A0004;Fried chicken 1 piece;4.99;-1
+A0001;JACOB;25.00;20

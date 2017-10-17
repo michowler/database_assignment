@@ -5,18 +5,33 @@
 /* Student ID: 0333120 */
 /*------------------------------------------------------------------- */
 
+//ask how to send the file?
+
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int order(), show_combo_meals(), show_addon(), purchase_meal();
+float taxing( float price, int quantity);
 
-int main() {		
+struct Meal {
+	float price;
+	float tax;
+	int quantity;
+	char code[5];
+	char description[100];
+	char name[50];	
+} meal1, meal2, meal3, meal4, meal5, sum;
+
+int main(void) {	
+
 	order();
 	return 0;
 }
 
 int order() {
 
-	int order_number; //declared variable to store order values
+	unsigned int order_number; //declared variable to store order values
 
 	puts("------------------------------------");
 	puts("Fast Food Ordering System");
@@ -33,7 +48,7 @@ int order() {
 	scanf("%d", &order_number);
 
 	while (order_number > 7 || order_number < 1) {
-		printf("Please enter a CORRECT order option (1-7): ");
+		printf("Please enter a valid order option (1-7): ");
 		scanf("%d", &order_number);		
 	} 
 
@@ -77,12 +92,12 @@ int order() {
 		case 6:
 			printf("Daily transactions!\n");
 			break;
-			// Total combo meal transaction :
-			// Total ala-carte transaction :
-			// Total sales :
-			// GST collected :
+			// printf("Total combo meal transaction : %d\n", combo_trans);
+			// printf("Total ala-carte transaction : %d\n", ala_trans);
+			// printf("Total sales : %.2f\n", grand_total);
+			// printf("GST collected : %.2f\n", sumgst);
 		case 7:
-			printf("Exit!");
+			printf("Exit! Thanks for coming!");
 			break;				
 		default:
 			printf("Invalid order!");
@@ -106,52 +121,72 @@ int purchase_meal() {
 
 	char meal_choice[5];
 	char *item;
-	float price, total;
+	float price, total, sumtax, tax;
 	int quantity;
+	float grand_total;
+	grand_total += total;
+	int combo_trans, ala_trans;
+	
 	
 	printf("What would you like to purchase and how many?\n");
 	scanf("%s %d", meal_choice, &quantity);	
 
-	switch (meal_choice[4]) {
-		case '1': 			// assuming they chose set 1 with code C0001 
-			price = 10.99;
-			item = "Lunch Deal Set A";
-			total = price * quantity;
 
-			print_receipt(quantity, item, price, total);
+		switch (meal_choice[4]) {
+			grand_total += total;
+			
+			//sumtax+=tax;
+			case '1': 			// assuming they chose set 1 with code C0001 
+				price = meal1.price;				
+				item = meal1.name;
+				tax = taxing(price, quantity);
+				total = (price * quantity) + tax;
+				grand_total += total;
+				combo_trans++;
 
-		    break;
-		case '2':
-			price = 12.99;
-			item = "Lunch Deal Set B";
-			total = price * quantity;
-			printf("%.2f\n", total);	
-		    
-		    break;
-		case '3':
-			price = 6.99;
-			item = "Teatime Saver";
-			total = price * quantity;	
-			printf("%.2f\n", total);
-		    
-		    break;
-		case '4':
-			price = 12.99;
-			item = "Dinner Deal Set A";
-			total = price * quantity;	
-			printf("%.2f\n", total);
-		    
-		    break;
-		case '5':
-			price = 14.99;
-			item = "Dinner Deal Set B";
-			total = price * quantity;
-			printf("%.2f\n", total);	
-		    
-		    break;		        
-		default:
-			puts("Invalid meal option!");
-	}
+				print_receipt(quantity, item, price, grand_total);				
+
+			    break;
+			case '2':
+				price = meal2.price;
+				item = meal2.name;
+				tax = taxing(price, quantity);
+				total = price * quantity + tax;
+				combo_trans++;
+				
+				
+			    
+			    break;
+			case '3':
+				price = meal3.price;
+				item = meal3.name;
+				total = price * quantity;	
+				
+				combo_trans++;
+			    
+			    break;
+			case '4':
+				price = meal4.price;
+				item = meal4.name;
+				total = price * quantity;	
+				combo_trans++;
+				printf("%.2f\n", total);
+			    
+			    break;
+			case '5':
+				price = meal5.price;
+				item = meal5.name;
+				total = price * quantity;
+				printf("%.2f\n", total);	
+				combo_trans++;
+			    
+			    break;		        
+			default:
+				puts("Invalid meal option!");
+				grand_total += total;
+
+		}
+	
 
 	return 0;
 	
@@ -169,20 +204,40 @@ int show_combo_meals() {
    puts(" COMBO MEALS: ");
    puts("----------------------------------------------");
 
-   fgets(text_file, 250, (FILE*)fp);
-   printf("%s\n", text_file );
+   // fgets(text_file, 250, (FILE*)fp);
+   // printf("%s\n", text_file );
 
-   fgets(text_file, 250, (FILE*)fp);
-   printf("%s\n", text_file );
+   // fgets(text_file, 250, (FILE*)fp);
+   // printf("%s\n", text_file );
    
-   fgets(text_file, 250, (FILE*)fp);
-   printf("%s\n", text_file );
+   // fgets(text_file, 250, (FILE*)fp);
+   // printf("%s\n", text_file );
 
-   fgets(text_file, 250, (FILE*)fp);
-   printf("%s\n", text_file );
+   // fgets(text_file, 250, (FILE*)fp);
+   // printf("%s\n", text_file );
 
-   fgets(text_file, 250, (FILE*)fp);
-   printf("%s\n", text_file );
+   // fgets(text_file, 250, (FILE*)fp);
+   // printf("%s\n", text_file );
+
+   fscanf(fp, "%[^:]:%[^:]:%f:%[^ ]\n", meal1.code, meal1.name, &meal1.price, meal1.description);
+   fscanf(fp, "\n%[^:]:%[^:]:%f:%[^ ]\n", meal2.code, meal2.name, &meal2.price, meal2.description);
+   fscanf(fp, "\n%[^:]:%[^:]:%f:%[^ ]\n", meal3.code, meal3.name, &meal3.price, meal3.description);
+
+
+   printf("---------------------------------------\n");
+   printf("code  :%s\n",meal1.code);
+   printf("Name     :%s\n",meal1.name);
+   printf("Price    :RM%.2f\n",meal1.price);
+   
+   printf("---------------------------------------\n");
+
+
+   printf("---------------------------------------\n");
+   printf("code  :%s\n",meal2.code);
+   printf("Name     :%s\n",meal2.name);
+   printf("Price    :RM%.2f\n",meal2.price);
+   
+   printf("---------------------------------------\n");
 
    puts("----------------------------------------------");
 
@@ -229,8 +284,9 @@ int show_addon() {
 // }
 
 // to calculate the total with tax
-// int tax(int price, int quantity) {
-// 	int taxed_total, total;
-// 	taxed_total += (total * 60 / 100);
-// 	return taxed_total;
-// }
+float taxing( float price, int quantity) {
+	float total;
+	total = 0;
+	total = (price * 0.06) * quantity;
+	return total;
+}
