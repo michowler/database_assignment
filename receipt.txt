@@ -1,1 +1,1 @@
-Quantity	:Name		:Price 
+Qty	:	Name				:	Price

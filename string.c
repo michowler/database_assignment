@@ -1,37 +1,28 @@
-//char *strtok(char *str, const char *delim)
+   void print_receipt(){
+    FILE *fp;
+    char text_file[250];
 
-#include <string.h>
-#include <stdio.h>
-//create a function to read and then store lines (each line has 4 variables) into seperate variables inside he array
-char stringify(char string[]);
+    fp = fopen("receipt.txt", "r"); //opens txt file and READS only
 
-int main () {
-   stringify("this:is:bad");
-   return 0;
-}
+    puts("----------------------------------------------");
+    puts(" ---------------YOUR RECEIPT----------------- ");
+    puts("----------------------------------------------");
 
-char stringify(char string[]){
-  
-  const char s[2] = ":";
-  char *token;
-  
-  /* get the first token */
-  token = strtok(string, s);
-  
-  /* walk through other tokens */
-  while( token != NULL ) {
-     printf( " %s\n", token );
-   
-     token = strtok(NULL, s);
-  }
+    fgets(text_file, 250, (FILE*)fp);
+    printf("%s\n", text_file );
 
-  return printf( "" );
-}
+    fgets(text_file, 250, (FILE*)fp);
+    printf("%s\n", text_file );
+    
+    fgets(text_file, 250, (FILE*)fp);
+    printf("%s\n", text_file );
 
-// char c[] = "abcd";
-//      OR,
-// char c[50] = "abcd";
-//      OR,
-// char c[] = {'a', 'b', 'c', 'd', '\0'};
-//      OR,
-// char c[5] = {'a', 'b', 'c', 'd', '\0'};
+    fgets(text_file, 250, (FILE*)fp);
+    printf("%s\n", text_file );
+
+    fgets(text_file, 250, (FILE*)fp);
+    printf("%s\n", text_file );
+    printf("Total (incl gst): RM %.2f\n", sum.total); 
+
+    puts(" ----------THANKS FOR PURCHASING-------------- ");
+   }
