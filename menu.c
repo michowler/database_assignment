@@ -15,23 +15,19 @@ int order(), show_combo_meals(), show_addon(), purchase_meal(), daily_transactio
 float taxing( float price, int quantity);
 
 struct Combo {
-	float price;
-	float tax;	
+	float price;	
 	char code[5];
 	char description[100];
 	char name[50];	
-	int combo_trans;
-	float total;
+	int combo_trans;	
 
 } combo1, combo2, combo3, combo4, combo5, csum;
 
 struct Addon {
-	float price;
-	float tax;	
+	float price;	
 	char code[5];
 	char description[100];
-	char name[50];	
-	float total;
+	char name[50];		
 	int ala_trans;
 
 } addon1, addon2, addon3, addon4, addon5, asum;
@@ -124,6 +120,14 @@ void print_order(int quantity, char *item, float price, float total) {
 	printf("Total (incl gst): RM %.2f\n", total);	
 }
 
+
+// to calculate the total with tax
+float taxing( float price, int quantity) {
+	float total;
+	total = 0;
+	total = (price * 0.06) * quantity;
+	return total;
+}
 
 //function to purchase a meal
 int purchase_meal() {
@@ -231,86 +235,97 @@ int purchase_meal() {
 
 					print_order(quantity, item, price, grand_total);
 
-			}					
+			}		
+
 		} 
 		else if (meal_choice[0] == 'A') {
-				// switch (meal_choice[4]) {												
-				// 	case '1': 			// assuming they chose set 1 with code C0001 
-				// 		price = meal1.price;				
-				// 		item = meal1.name;
-				// 		tax = taxing(meal1.price, quantity);
-				// 		total = (meal1.price * quantity) + tax;
-				// 		grand_total += total;
-				// 		sumtax += tax;
-				// 		combo_trans++;
+			switch (meal_choice[4]) {											
+				case '1': 			// assuming they chose set 1 with code C0001 
+					price = addon1.price;				
+					item = addon1.name;
+					tax = taxing(addon1.price, quantity);					
+					total = (addon1.price * quantity) + tax;
+					grand_total += total;
+					sumtax += tax;
+					asum.ala_trans++;
+					sum.total = grand_total;
+					sum.tax = sumtax;
 
-				// 		print_order(quantity, item, price, total);				
+					//fprintf(fptr, "%d\t:%s\t\t:%.2f\n", quantity, addon1.name, addon1.price);
+					print_order(quantity, item, price, grand_total);				
 
-				// 	    break;
-				// 	case '2':
-				// 		price = combo2.price;
-				// 		item = combo2.name;
-				// 		tax = taxing(combo2.price, quantity);
-				// 		total = (combo2.price * quantity) + tax;
-				// 		grand_total += total;
-				// 		sumtax += tax;
-				// 		combo_trans++;
-						
-				// 		print_order(quantity, item, price, grand_total);	
-					    
-				// 	    break;
-				// 	case '3':
-				// 		price = combo3.price;
-				// 		item = combo3.name;
-				// 		tax = taxing(combo3.price, quantity);
-				// 		total = (combo3.price * quantity) + tax;
-				// 		grand_total += total;
-				// 		sumtax += tax;
-				// 		combo_trans++;
-						
-				// 		print_order(quantity, item, price, grand_total);	
-					    
-					    
-				// 	    break;
-				// 	case '4':
-				// 		price = combo4.price;
-				// 		item = combo4.name;
-				// 		tax = taxing(combo4.price, quantity);
-				// 		total = (combo4.price * quantity) + tax;
-				// 		grand_total += total;
-				// 		sumtax += tax;
-				// 		combo_trans++;
-						
-				// 		print_order(quantity, item, price, grand_total);
-					    
-				// 	    break;
-				// 	case '5':
-				// 		price = combo5.price;
-				// 		item = combo5.name;
-				// 		tax = taxing(combo5.price, quantity);
-				// 		total = (combo5.price * quantity) + tax;
-				// 		grand_total += total;
-				// 		sumtax += tax;
-				// 		combo_trans++;
-						
-				// 		print_order(quantity, item, price, grand_total);
-					    
-				// 	    break;		     
-				// 	default:
-				// 		puts("Invalid meal option!");
-				// 		grand_total += total;
-				// 		sumtax += tax;
+				    break;
+				case '2':
+					price = addon2.price;
+					item = addon2.name;
+					tax = taxing(addon2.price, quantity);
+					total = (addon2.price * quantity) + tax;
+					grand_total += total;
+					sumtax += tax;
+					asum.ala_trans++;
+					sum.total = grand_total;
+					sum.tax = sumtax;
+					
+					print_order(quantity, item, price, grand_total);	
+				    
+				    break;
+				case '3':
+					price = addon3.price;
+					item = addon3.name;
+					tax = taxing(addon3.price, quantity);
+					total = (addon3.price * quantity) + tax;
+					grand_total += total;
+					sumtax += tax;
+					asum.ala_trans++;
+					sum.total = grand_total;
+					sum.tax = sumtax;
+					
+					print_order(quantity, item, price, grand_total);	
+				    
+				    
+				    break;
+				case '4':
+					price = addon4.price;
+					item = addon4.name;
+					tax = taxing(addon4.price, quantity);
+					total = (addon4.price * quantity) + tax;
+					grand_total += total;
+					sumtax += tax;
+					asum.ala_trans++;
+					sum.total = grand_total;
+					sum.tax = sumtax;
+					
+					print_order(quantity, item, price, grand_total);
+				    
+				    break;
+				case '5':
+					price = addon5.price;
+					item = addon5.name;
+					tax = taxing(addon5.price, quantity);
+					total = (addon5.price * quantity) + tax;
+					grand_total += total;
+					sumtax += tax;
+					asum.ala_trans++;
+					sum.total = grand_total;
+					sum.tax = sumtax;
+					
+					print_order(quantity, item, price, grand_total);
+				    
+				    break;		     
+				default:
+					puts("Invalid meal option!");
+					grand_total += total;
+					sumtax += tax;
+					sum.total = grand_total;
+					sum.tax = sumtax;
 
-				// 		print_order(quantity, item, price, grand_total);
+					print_order(quantity, item, price, grand_total);
 
-				// }	
-
-				break;									
+			}		
+											
 		}	
 		
 	}	
-
-	
 
 	fclose(fptr); //close the file
 	return 0;
@@ -393,43 +408,41 @@ int show_addon() {
    puts(" ADD-ONS: ");
    puts("----------------------------------------------");
 
-   fgets(text_file, 250, (FILE*)fp);
    printf("%s\n", text_file );
+   fscanf(fp, "%[^:]:%[^:]:%f:%[^ ]\n", addon1.code, addon1.name, &addon1.price, addon1.description);
+   fscanf(fp, "\n%[^:]:%[^:]:%f:%[^ ]\n", addon2.code, addon2.name, &addon2.price, addon2.description);
+   fscanf(fp, "\n%[^:]:%[^:]:%f:%[^ ]\n", addon3.code, addon3.name, &addon3.price, addon3.description);
+   fscanf(fp, "\n%[^:]:%[^:]:%f:%[^ ]\n", addon4.code, addon4.name, &addon4.price, addon4.description);
+   fscanf(fp, "\n%[^:]:%[^:]:%f:%[^ ]\n", addon5.code, addon5.name, &addon5.price, addon5.description);
 
-   fgets(text_file, 250, (FILE*)fp);
-   printf("%s\n", text_file );
-   
-   fgets(text_file, 250, (FILE*)fp);
-   printf("%s\n", text_file );
-
-   fgets(text_file, 250, (FILE*)fp);
-   printf("%s\n", text_file );
-
-   fgets(text_file, 250, (FILE*)fp);
-   printf("%s\n", text_file );
-
+   printf("Code  :%s\n",addon1.code);
+   printf("Name     :%s\n",addon1.name);
+   printf("Price    :RM%.2f\n",addon1.price);
+   printf("Description    :%s\n",addon1.description);
+   printf("---------------------------------------\n");
+   printf("Code  :%s\n",addon2.code);
+   printf("Name     :%s\n",addon2.name);
+   printf("Price    :RM%.2f\n",addon2.price);
+   printf("Description    :%s\n",addon2.description);
+   printf("---------------------------------------\n");   
+   printf("Code  :%s\n",addon3.code);
+   printf("Name     :%s\n",addon3.name);
+   printf("Price    :RM%.2f\n",addon3.price);
+   printf("Description    :%s\n",addon3.description);
+   printf("---------------------------------------\n");
+   printf("Code  :%s\n",addon4.code);
+   printf("Name     :%s\n",addon4.name);
+   printf("Price    :RM%.2f\n",addon4.price);
+   printf("Description    :%s\n",addon4.description);
+   printf("---------------------------------------\n");
+   printf("Code  :%s\n",addon5.code);
+   printf("Name     :%s\n",addon5.name);
+   printf("Price    :RM%.2f\n",addon5.price);
+   printf("Description    :%s\n",addon5.description);
+   printf("---------------------------------------\n");
    puts("----------------------------------------------");
 
    fclose(fp); //close txt file
    return 0;
 
-}
-
- // int daily_transactions(char meal_choice[]) {
-	// int ala_trans, combo_trans;
-
-	// if (meal_choice[0] == 'C') {
-	// 	ala_trans++;
-	// } else if (meal_choice[0] == 'A') {
-	// 	combo_trans++;
-	// }
-	// return 0;
- // }
-
-// to calculate the total with tax
-float taxing( float price, int quantity) {
-	float total;
-	total = 0;
-	total = (price * 0.06) * quantity;
-	return total;
 }
