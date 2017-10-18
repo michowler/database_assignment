@@ -68,7 +68,7 @@ while(strcmp(icode, "-1") != 0)//while loop to compare the input with sentinel v
     fptr = fopen("gst.txt", "r");//command to open a specific file
     while(!feof(fptr))
     {
-         fscanf(fptr, " %[^;];%[^;];%lf;%d", product.code, product.name, &product.price, &product.quantity);//prints the data inside the file
+        fscanf(fptr, " %[^;];%[^;];%lf;%d", product.code, product.name, &product.price, &product.quantity);//prints the data inside the file
         if(strcmp(icode, product.code) == 0)
         {
             printf("Enter the quantity of the item:");
