@@ -1,1 +1,1 @@
-C0001;Lunch Deal Set A;10.99;3
+C0001;Lunch Deal Set A;10.99;1

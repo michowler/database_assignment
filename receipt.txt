@@ -1,1 +1,33 @@
-Qty	:	Name				:	Price
+2	Soft drink			3.99
+2              Lunch Deal Set A           10.99            
+1	Soft drink			3.99
+1	Soft drink			3.99
+2	Salad			3.99
+2	Burger			6.99
+12             Lunch Deal Set B           12.99            
+1              Lunch Deal Set A           10.99            
+2              Teatime Saver              6.99             
+124            Lunch Deal Set A           10.99            
+12	Salad			3.99
+1              Lunch Deal Set A           10.99            
+124            Lunch Deal Set B           12.99            
+1	Soft drink			3.99
+1              Lunch Deal Set B           12.99            
+12	Burger			6.99
+12             Lunch Deal Set A           10.99            
+2              Lunch Deal Set A           10.99            
+589666663	Burger			6.99
+2	Salad			3.99
+2017037555	Burger			6.99
+2017037555     Lunch Deal Set B           12.99            
+2017037555     Lunch Deal Set B           12.99            
+-1977199930	Salad			3.99
+-758360267	Soft drink			3.99
+0	Soft drink			3.99
+2              Lunch Deal Set A           10.99            
+0	Soft drink			3.99
+2              Lunch Deal Set B           12.99            
+1	Salad			3.99
+2              Lunch Deal Set A           10.99            
+2	Soft drink			3.99
+1	Fried chicken 1 piece			4.99
