@@ -9,7 +9,7 @@ struct Combo { //initialize structure using static for local files
 	char name[50];	
 	int combo_trans;	
 
-} combo1, combo2, combo3, combo4, combo5, csum;
+} combo, combo1, combo2, combo3, combo4, combo5, csum;
 
 struct Addon {
 	float price;	
@@ -24,4 +24,5 @@ struct Meal {
 	float total;
 	float tax;	
 	int trans;
+	float grand_total;
 } sum;

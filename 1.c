@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 
-int main () {
+int main_zombie () {
    char str1[10], str2[10], str3[10];
    int year;
    FILE * fp;
