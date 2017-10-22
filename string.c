@@ -27,8 +27,18 @@
     puts(" ----------THANKS FOR PURCHASING-------------- ");
    }
 
+   
+   // printf("%-16s%-24s%-19s%-18s\n\n","Meal Code","Meal Name","Meal Price","Meal Description");         
+   // printf(" %-15s%-27s RM %-17.2f %-27s\n",combo1.code,combo1.name,combo1.price,combo1.description);        
+   // printf(" %-15s%-27s RM %-17.2f %-27s\n",combo2.code,combo2.name,combo2.price,combo2.description);     
+   // printf(" %-15s%-27s RM %-17.2f %-27s\n",combo3.code,combo3.name,combo3.price,combo1.description);
+   // printf(" %-15s%-27s RM %-17.2f %-27s\n",combo4.code,combo4.name,combo4.price,combo4.description);
+   // printf(" %-15s%-27s RM %-17.2f %-27s\n",combo5.code,combo5.name,combo5.price,combo5.description);
 
-      // printf("Code  : %s\n",combo1.code);
+
+//fscanf(cfp, "%[^:]:%[^:]:%f:%[^\n]\n",menu_code,name,&price,description);
+
+   // printf("Code  : %s\n",combo1.code);
    // printf("Name     : %s\n",combo1.name);
    // printf("Price    : RM %.2f\n",combo1.price);
    // printf("Description    : %s\n",combo1.description);

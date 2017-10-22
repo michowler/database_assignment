@@ -2,9 +2,9 @@ int show_combo_meals(), show_addon(), purchase_meal();
 float taxing(float price, int quantity);
 void order(), print_order(int quantity, char *item, float price, float total), print_receipt();
 
-struct Combo { //initialize structure using static for local files
+struct Combo { 
 	float price;	
-	char code[5];
+	char code[6];
 	char description[100];
 	char name[50];	
 	int combo_trans;	
@@ -13,7 +13,7 @@ struct Combo { //initialize structure using static for local files
 
 struct Addon {
 	float price;	
-	char code[5];
+	char code[6];
 	char description[100];
 	char name[50];		
 	int ala_trans;

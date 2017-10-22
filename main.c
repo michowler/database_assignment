@@ -17,9 +17,7 @@ int main(void) {
 }
 
 void order() {
-
 	unsigned int order_number; //declared variable to store order values	
-
 	do {
 		puts("------------------------------------");
 		puts("Fast Food Ordering System");
@@ -42,8 +40,8 @@ void order() {
 		//prompt user for purchase again until enters exit option (7)
 		switch(order_number) {
 			case 1:
-				show_combo_meals();	
-				show_addon();
+				// show_combo_meals();	
+				// show_addon();
 				purchase_meal();				
 				exit(0);
 			case 2:
@@ -130,7 +128,7 @@ int purchase_meal() {
 		printf("Please enter a meal order option (-1 to exit). Example: C0001.\n");		
 		scanf("%s", meal_choice);
 
-		if (meal_choice[0] == '-' && meal_choice[1] == '1') {			
+		if (meal_choice[0] == '-' && meal_choice[1] == '1') {	//when input sentinel value then print receipt and go back to menu
 			print_receipt();				
 			order();
 		} 
@@ -146,7 +144,7 @@ int purchase_meal() {
 			} 
 			else {				
 				switch (meal_choice[4]) {											
-					case '1': 			// assuming they chose set 1 with code C0001 				
+					case '1': // assuming they chose combo 1 with code C0001 				
 						price = combo1.price;				
 						item = combo1.name;											
 						total = combo1.price * quantity;
@@ -271,35 +269,49 @@ int purchase_meal() {
 }
 
 //function to display all combo meals available
-int show_combo_meals() {
-	char menu_code[5], name[50], description[100];	
-	float price;
-
+int show_combo_meals() {		
    FILE *cfp; //pointer for combo text file
    char text_file[250];
 
    cfp = fopen("combo.txt", "r"); //opens txt file and READS only
 
-   puts("------------------------------------------------------------------------------");
-   puts("---------------------------------COMBO MEALS----------------------------------");
-   puts("------------------------------------------------------------------------------");
-   fscanf(cfp, "%[^:]:%[^:]:%f:%[^\n]\n", combo1.code, combo1.name, &combo1.price, combo1.description);
-   fscanf(cfp, "%[^:]:%[^:]:%f:%[^\n]\n", combo2.code, combo2.name, &combo2.price, combo2.description);
-   fscanf(cfp, "%[^:]:%[^:]:%f:%[^\n]\n", combo3.code, combo3.name, &combo3.price, combo3.description);
-   fscanf(cfp, "%[^:]:%[^:]:%f:%[^\n]\n", combo4.code, combo4.name, &combo4.price, combo4.description);
-   fscanf(cfp, "%[^:]:%[^:]:%f:%[^\n]\n", combo5.code, combo5.name, &combo5.price, combo5.description);
+   puts("----------------------------------------------------");
+   puts("----------------COMBO MEALS------------------------");
+   puts("----------------------------------------------------");
+   fscanf(cfp, "%5[^:]:%[^:]:%f:%[^\n]\n", combo1.code, combo1.name, &combo1.price, combo1.description);
+   fscanf(cfp, "%5[^:]:%[^:]:%f:%[^\n]\n", combo2.code, combo2.name, &combo2.price, combo2.description);
+   fscanf(cfp, "%5[^:]:%[^:]:%f:%[^\n]\n", combo3.code, combo3.name, &combo3.price, combo3.description);
+   fscanf(cfp, "%5[^:]:%[^:]:%f:%[^\n]\n", combo4.code, combo4.name, &combo4.price, combo4.description);
+   fscanf(cfp, "%5[^:]:%[^:]:%f:%[^\n]\n", combo5.code, combo5.name, &combo5.price, combo5.description);
 
    if ((cfp = fopen("combo.txt", "r"))== NULL)
     {
        puts("File could not be found");
     } else {
-       printf("%-16s%-24s%-19s%-18s\n\n","Meal Code","Meal Name","Meal Price","Meal Description");       	
-       //fscanf(cfp, "%[^:]:%[^:]:%f:%[^\n]\n",menu_code,name,&price,description);
-        printf(" %-15s%-27s RM %-17.2f %-27s\n",combo1.code,combo1.name,combo1.price,combo1.description);        
-        printf(" %-15s%-27s RM %-17.2f %-27s\n",combo2.code,combo2.name,combo2.price,combo2.description);     
-        printf(" %-15s%-27s RM %-17.2f %-27s\n",combo3.code,combo3.name,combo3.price,combo1.description);
-        printf(" %-15s%-27s RM %-17.2f %-27s\n",combo4.code,combo4.name,combo4.price,combo4.description);
-        printf(" %-15s%-27s RM %-17.2f %-27s\n",combo5.code,combo5.name,combo5.price,combo5.description);
+    	printf("Code  : %s\n",combo1.code);
+    	printf("Name     : %s\n",combo1.name);
+    	printf("Price    : RM %.2f\n",combo1.price);
+    	printf("Description    : %s\n",combo1.description);
+    	printf("---------------------------------------\n");
+    	printf("Code  : %s\n",combo2.code);
+    	printf("Name     : %s\n",combo2.name);
+    	printf("Price    : RM %.2f\n",combo2.price);
+    	printf("Description    : %s\n",combo2.description);
+    	printf("---------------------------------------\n");   
+    	printf("Code  : %s\n",combo3.code);
+    	printf("Name     : %s\n",combo3.name);
+    	printf("Price    : RM %.2f\n",combo3.price);
+    	printf("Description    : %s\n",combo3.description);
+    	printf("---------------------------------------\n");
+    	printf("Code  : %s\n",combo4.code);
+    	printf("Name     : %s\n",combo4.name);
+    	printf("Price    : RM %.2f\n",combo4.price);
+    	printf("Description    : %s\n",combo4.description);
+    	printf("---------------------------------------\n");
+    	printf("Code  : %s\n",combo5.code);
+    	printf("Name     : %s\n",combo5.name);
+    	printf("Price    : RM %.2f\n",combo5.price);
+    	printf("Description    : %s\n",combo5.description);
     }  
    puts("------------------------------------------------------------------------------\n");
    fclose(cfp); //close the file
@@ -307,35 +319,50 @@ int show_combo_meals() {
 }
 
 int show_addon() {
-	char menu_code[5], name[50], description[100];
-	float price;
-
    FILE *afp; //pointer for addon text file
    char text_file[250];
 
    afp = fopen("addon.txt", "r"); //opens txt file and READS only
 
-   puts("------------------------------------------------------------------------------");
-   puts(" --------------------------------ADD-ONS------------------------------------- ");
-   puts("------------------------------------------------------------------------------");
+   puts("----------------------------------------------------");
+   puts(" --------------------ADD-ONS----------------------- ");
+   puts("----------------------------------------------------");
 
    // printf("%s\n", text_file );
-   fscanf(afp, "%[^:]:%[^:]:%f:%[^\n]", addon1.code, addon1.name, &addon1.price, addon1.description);
-   fscanf(afp, "%[^:]:%[^:]:%f:%[^\n]", addon2.code, addon2.name, &addon2.price, addon2.description);
-   fscanf(afp, "%[^:]:%[^:]:%f:%[^\n]", addon3.code, addon3.name, &addon3.price, addon3.description);
-   fscanf(afp, "%[^:]:%[^:]:%f:%[^\n]", addon4.code, addon4.name, &addon4.price, addon4.description);
-   fscanf(afp, "%[^:]:%[^:]:%f:%[^\n]", addon5.code, addon5.name, &addon5.price, addon5.description);
+   fscanf(afp, "%5[^:]:%[^:]:%f:%[^\n]\n", addon1.code, addon1.name, &addon1.price, addon1.description);
+   fscanf(afp, "%5[^:]:%[^:]:%f:%[^\n]\n", addon2.code, addon2.name, &addon2.price, addon2.description);
+   fscanf(afp, "%5[^:]:%[^:]:%f:%[^\n]\n", addon3.code, addon3.name, &addon3.price, addon3.description);
+   fscanf(afp, "%5[^:]:%[^:]:%f:%[^\n]\n", addon4.code, addon4.name, &addon4.price, addon4.description);
+   fscanf(afp, "%5[^:]:%[^:]:%f:%[^\n]\n", addon5.code, addon5.name, &addon5.price, addon5.description);
 
    if ((afp = fopen("addon.txt", "r"))== NULL)
    {
        puts("File could not be found");
     } else {     
-	    printf("%-16s%-24s%-19s%-18s\n\n","Meal Code","Meal Name","Meal Price","Meal Description");       	     
-    	printf("%-15s%-27s RM %-17.2f%-27s\n",addon1.code,addon1.name,addon1.price,addon1.description);        
-    	printf("%-15s%-27s RM %-17.2f%-27s\n",addon2.code,addon2.name,addon2.price,addon2.description);     
-    	printf("%-15s%-27s RM %-17.2f%-27s\n",addon3.code,addon3.name,addon3.price,addon1.description);
-    	printf("%-15s%-27s RM %-17.2f%-27s\n",addon4.code,addon4.name,addon4.price,addon4.description);
-    	printf("%-15s%-27s RM %-17.2f%-27s\n",addon5.code,addon5.name,addon5.price,addon5.description);
+	   printf("Code  : %s\n",addon1.code);
+	   printf("Name     : %s\n",addon1.name);
+	   printf("Price    : RM %.2f\n",addon1.price);
+	   printf("Description    : %s\n",addon1.description);
+	   printf("---------------------------------------\n");
+	   printf("Code  : %s\n",addon2.code);
+	   printf("Name     : %s\n",addon2.name);
+	   printf("Price    : RM %.2f\n",addon2.price);
+	   printf("Description    : %s\n",addon2.description);
+	   printf("---------------------------------------\n");   
+	   printf("Code  : %s\n",addon3.code);
+	   printf("Name     : %s\n",addon3.name);
+	   printf("Price    : RM %.2f\n",addon3.price);
+	   printf("Description    : %s\n",addon3.description);
+	   printf("---------------------------------------\n");
+	   printf("Code  : %s\n",addon4.code);
+	   printf("Name     : %s\n",addon4.name);
+	   printf("Price    : RM %.2f\n",addon4.price);
+	   printf("Description    : %s\n",addon4.description);
+	   printf("---------------------------------------\n");
+	   printf("Code  : %s\n",addon5.code);
+	   printf("Name     : %s\n",addon5.name);
+	   printf("Price    : RM %.2f\n",addon5.price);
+	   printf("Description    : %s\n",addon5.description);
     }  
    puts("------------------------------------------------------------------------------");
 
