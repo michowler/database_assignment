@@ -105,9 +105,9 @@ void print_receipt(){
 		printf("%s\n", text_file);
 	}
 
-	printf("6%% GST : RM %.2f\n", (sum.total * 1.06) * 0.06);
-	printf("Subtotal (excl gst) : RM %.2f\n",sum.total);
-	printf("Subtotal (incl gst): RM %.2f\n", sum.total * 1.06);	
+	// printf("6%% GST : RM %.2f\n", (sum.total * 1.06) * 0.06);
+	// printf("Subtotal (excl gst) : RM %.2f\n",sum.total);
+	// printf("Subtotal (incl gst): RM %.2f\n", sum.total * 1.06);	
 
 	puts("----------------------------------------------------------");
 	puts(" -----------------THANKS FOR PURCHASING------------------ ");
