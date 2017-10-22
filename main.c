@@ -40,8 +40,8 @@ void order() {
 		//prompt user for purchase again until enters exit option (7)
 		switch(order_number) {
 			case 1:
-				// show_combo_meals();	
-				// show_addon();
+				show_combo_meals();	
+				show_addon();
 				purchase_meal();				
 				exit(0);
 			case 2:
@@ -90,17 +90,17 @@ void print_order(int quantity, char *item, float price, float total) {
 
 void print_receipt(){
 	FILE *fp; //pointer for receipt txt file
-	int i;
+	int i, trans;
 	char text_file[250];	
 	fp = fopen("receipt.txt", "r"); 
-	sum.trans = asum.ala_trans + csum.combo_trans;
+	trans = asum.ala_trans + csum.combo_trans;
 
 	puts("----------------------------------------------------------");
 	puts(" ----------------------YOUR RECEIPT---------------------- ");
 	puts("----------------------------------------------------------");
-	puts ("QTY |\t\t\tITEM\t\t\t|\tPRICE");
+	puts ("QTY\t|\tITEM\t\t\t|\tPRICE");
 
-	for (i = 0; i < sum.trans; i++) {
+	for (i = 0; i < trans; i++) {
 		fgets(text_file, 250, (FILE*)fp);
 		printf("%s\n", text_file);
 	}
@@ -150,7 +150,7 @@ int purchase_meal() {
 						total = combo1.price * quantity;
 						grand_total += total;						
 						csum.combo_trans++;
-						fprintf(fptr, "%-15u%-27s%-17.2f\n", quantity, combo1.name, combo1.price);					
+						fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, combo1.name, combo1.price);					
 						print_order(quantity, item, price, grand_total);				
 					    break;
 					case '2':
@@ -159,7 +159,7 @@ int purchase_meal() {
 						total = combo2.price * quantity;
 						grand_total += total;						
 						csum.combo_trans++;																				
-						fprintf(fptr, "%-15u%-27s%-17.2f\n", quantity, combo2.name, combo2.price);
+						fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, combo2.name, combo2.price);
 						print_order(quantity, item, price, grand_total);						    
 					    break;
 					case '3':
@@ -168,7 +168,7 @@ int purchase_meal() {
 						total = combo3.price * quantity;
 						grand_total += total;					
 						csum.combo_trans++;																							
-						fprintf(fptr, "%-15u%-27s%-17.2f\n", quantity, combo3.name, combo3.price);
+						fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, combo3.name, combo3.price);
 						print_order(quantity, item, price, grand_total);						    
 					    break;
 					case '4':
@@ -177,7 +177,7 @@ int purchase_meal() {
 						total = combo4.price * quantity;
 						grand_total += total;						
 						csum.combo_trans++;							
-						fprintf(fptr, "%-15u%-27s%-17.2f\n", quantity, combo4.name, combo4.price);
+						fprintf(fptr, "%-15u%-40s%-17.2f\n", quantity, combo4.name, combo4.price);
 						print_order(quantity, item, price, grand_total);					    
 					    break;
 					case '5':
@@ -186,7 +186,7 @@ int purchase_meal() {
 						total = combo5.price * quantity;
 						grand_total += total;						
 						csum.combo_trans++;																
-						fprintf(fptr, "%-15u%-27s%-17.2f\n", quantity, combo5.name, combo5.price);
+						fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, combo5.name, combo5.price);
 						print_order(quantity, item, price, grand_total);					    
 					    break;		     
 					default:
@@ -212,7 +212,7 @@ int purchase_meal() {
 						total = addon1.price * quantity;
 						asum.ala_trans++;
 						grand_total += total;																															
-						fprintf(fptr, "%-15u%-27s%-17.2f\n", quantity, addon1.name, addon1.price);					
+						fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, addon1.name, addon1.price);					
 						print_order(quantity, item, price, grand_total);				
 					    break;
 					case '2':
@@ -221,7 +221,7 @@ int purchase_meal() {
 						total = addon2.price * quantity;
 						asum.ala_trans++;
 						grand_total += total;																																	
-						fprintf(fptr, "%-15u%-27s%-17.2f\n", quantity, addon2.name, addon2.price);
+						fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, addon2.name, addon2.price);
 						print_order(quantity, item, price, grand_total);						    
 					    break;
 					case '3':
@@ -230,7 +230,7 @@ int purchase_meal() {
 						total = addon3.price * quantity;
 						asum.ala_trans++;
 						grand_total += total;																									
-						fprintf(fptr, "%-15u%-27s%-17.2f\n", quantity, addon3.name, addon3.price);
+						fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, addon3.name, addon3.price);
 						print_order(quantity, item, price, grand_total);						    
 					    break;
 					case '4':
@@ -239,7 +239,7 @@ int purchase_meal() {
 						total = addon4.price * quantity;						
 						asum.ala_trans++;
 						grand_total += total;																									
-						fprintf(fptr, "%-15u%-27s%-17.2f\n", quantity, addon4.name, addon4.price);
+						fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, addon4.name, addon4.price);
 						print_order(quantity, item, price, grand_total);					    
 					    break;
 					case '5':
@@ -248,7 +248,7 @@ int purchase_meal() {
 						total = addon5.price * quantity;
 						asum.ala_trans++;
 						grand_total += total;																											
-						fprintf(fptr, "%-15u%-27s%-17.2f\n", quantity, addon5.name, addon5.price);
+						fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, addon5.name, addon5.price);
 						print_order(quantity, item, price, grand_total);					    
 					    break;		     
 					default:
