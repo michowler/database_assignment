@@ -2,14 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-/*-------------------------------------------------------------------*/
-/* ITS60304 C Assignment #1 */
-/* C Programming */
-/* Student Name: <HO KEH RIN> <KHOR MAN YEE> <MEERASHINI MENON> */
-/* Student ID: <0326439> <0324125> <0323644>*/
-/*-------------------------------------------------------------------*/
-
-struct Product//declaring a structure
+struct Meal//declaring a structure
 {
     char code[25];//variables inside a structure
     char name[25];

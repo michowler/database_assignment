@@ -24,6 +24,14 @@ int gcd(int a, int b) {
     
 }
 
+//example b = 10, a = 2
+10%2 = 0
+now a = 0%2 and b = 0
+0%2 = 0 
+
+10%4 != 0
+
+
 int lcm(int a, int b) {	
 	return a * b / (gcd(a, b));
 }
