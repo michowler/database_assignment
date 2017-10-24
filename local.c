@@ -11,12 +11,26 @@
 #include <string.h>
 #include "header.c"
 
-int main(void) {	
+int main(void) {		
 	order(); //entry function
 	return 0;
 }
 
 void order() {
+	struct Combo { 
+		int combo_trans;	
+
+	} combo, combo1, combo2, combo3, combo4, combo5, csum;
+
+	struct Addon {	
+		int ala_trans;
+
+	} addon1, addon2, addon3, addon4, addon5, asum;
+
+	struct Meal {
+		float grand_total;
+	} sum;
+
 	unsigned int order_number; //declared variable to store order values	
 	do {
 		puts("------------------------------------");
@@ -89,6 +103,15 @@ void print_order(int quantity, char *item, float price, float total) {
 }
 
 void print_receipt(){
+
+	struct Combo { 
+		int combo_trans;	
+	} csum;
+
+	struct Addon {	
+		int ala_trans;
+	} asum;
+
 	FILE *fp; //pointer for receipt txt file
 	int i, trans;
 	char text_file[250];	
@@ -122,9 +145,29 @@ int purchase_meal() {
 	float price;
 	unsigned int quantity=0;	
 	float total=0, grand_total=0;	
+
+	struct Combo { 
+		float price;			
+		char description[100];
+		char name[50];	
+		int combo_trans;	
+
+	} combo, combo1, combo2, combo3, combo4, combo5, csum;
+
+	struct Addon {
+		float price;			
+		char description[100];
+		char name[50];		
+		int ala_trans;
+
+	} addon1, addon2, addon3, addon4, addon5, asum;
+
+	struct Meal {
+		float total;		
+		float grand_total;
+	} sum;
 	
 	while(strcmp(meal_choice, "-1") != 0) {		
-
 		printf("Please enter a meal order option (-1 to exit). Example: C0001.\n");		
 		scanf("%s", meal_choice);
 
@@ -273,6 +316,20 @@ int show_combo_meals() {
    FILE *cfp; //pointer for combo text file
    char text_file[250];
 
+   struct Combo { 
+   	float price;	
+   	char code[6];
+   	char description[100];
+   	char name[50];	
+   } combo, combo1, combo2, combo3, combo4, combo5;
+
+   struct Addon {
+   	float price;	
+   	char code[6];
+   	char description[100];
+   	char name[50];		
+   } addon1, addon2, addon3, addon4, addon5;
+
    cfp = fopen("combo.txt", "r"); //opens txt file and READS only
 
    puts("----------------------------------------------------");
@@ -321,6 +378,20 @@ int show_combo_meals() {
 int show_addon() {
    FILE *afp; //pointer for addon text file
    char text_file[250];
+
+   struct Combo { 
+   	float price;	
+   	char code[6];
+   	char description[100];
+   	char name[50];	
+   } combo, combo1, combo2, combo3, combo4, combo5;
+
+   struct Addon {
+   	float price;	
+   	char code[6];
+   	char description[100];
+   	char name[50];		   	
+   } addon1, addon2, addon3, addon4, addon5;
 
    afp = fopen("addon.txt", "r"); //opens txt file and READS only
 

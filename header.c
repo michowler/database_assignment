@@ -21,8 +21,7 @@ struct Addon {
 } addon1, addon2, addon3, addon4, addon5, asum;
 
 struct Meal {
-	float total;
-	float tax;	
+	float total;	
 	int trans;
 	float grand_total;
 } sum;
