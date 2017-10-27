@@ -11,7 +11,7 @@
 #include <string.h>
 
 //prototype of functions used
-int print_menu(char meal_code[6], char meal_name[25], double meal_price, char meal_description[100]);
+int print_menu();
 void daily_transactions(int combo_trans, int ala_trans, float grand_total);
 void order(), print_order(int quantity, char *item, float price, float total), print_receipt(int combo_trans, int ala_trans, float total);
 
@@ -69,8 +69,9 @@ void print_receipt(int combo_trans, int ala_trans, float total){
 }
 
 //function to display all combo meals available
-int print_menu(char meal_code[6], char meal_name[25], double meal_price, char meal_description[100]){
-	
+int print_menu(){
+	char meal_code[6], meal_name[25], meal_description[100];
+	double meal_price;
 	int i;
 	FILE *cfp; //pointer for combo text file
 	FILE *afp; //pointer for addon text file      
@@ -111,18 +112,20 @@ int print_menu(char meal_code[6], char meal_name[25], double meal_price, char me
 
 void order() {
 	FILE *fptr; //flie pointer for receipt text file
+	FILE *tfptr; //flie pointer for transaction text file
 	FILE *mfptr; //flie pointer for combo text file
 	FILE *afptr; //flie pointer for addon text file
 	unsigned int order_number; //declared variable to store order values	
 	char meal_choice[6]; //user input meal code	
 	unsigned int quantity=0, i;	
 	float total=0, grand_total=0;	
-	unsigned int combo_trans=0, ala_trans=0;
-	
+	unsigned int combo_trans=0, ala_trans=0;	
 	char meal_code[6];
 	char meal_name[25];
 	double meal_price;
-	char meal_description[100];
+	char meal_description[30];	
+	char str[100];	
+	
 
 	do {
 		puts("------------------------------------");
@@ -171,7 +174,7 @@ void order() {
 							switch (meal_choice[4]) {											
 								case '1': // assuming they chose combo 1 with code C0001 				
 									mfptr = fopen("combo.txt", "r");
-									for (i=0; i<2; i++){
+									for (i=0; i<1; i++){
 										fscanf(mfptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
 									}																											
 									total = meal_price * quantity;
@@ -183,19 +186,19 @@ void order() {
 								    break;
 								case '2':
 									mfptr = fopen("combo.txt", "r");
-									for (i=0; i<3; i++){
+									for (i=0; i<2; i++){
 										fscanf(mfptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
 									}						
 									total = meal_price * quantity;
-									grand_total += total;				
-									combo_trans++;																				
+									grand_total += total;																																	
 									fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price);					
 									print_order(quantity, meal_name, meal_price, grand_total);					    
 									fclose(mfptr);	
+									combo_trans++;
 								    break;
 								case '3':
 									mfptr = fopen("combo.txt", "r");
-									for (i=0; i<4; i++){
+									for (i=0; i<3; i++){
 										fscanf(mfptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
 									}						
 									total = meal_price * quantity;
@@ -207,7 +210,7 @@ void order() {
 								    break;
 								case '4':
 									mfptr = fopen("combo.txt", "r");
-									for (i=0; i<5; i++){
+									for (i=0; i<4; i++){
 										fscanf(mfptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
 									}							
 									total = meal_price * quantity;
@@ -219,7 +222,7 @@ void order() {
 								    break;
 								case '5':
 									mfptr = fopen("combo.txt", "r");
-									for (i=0; i<6; i++){
+									for (i=0; i<5; i++){
 										fscanf(mfptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
 									}							
 									total = meal_price * quantity;
@@ -248,7 +251,7 @@ void order() {
 							switch (meal_choice[4]) {											
 								case '1': 			// assuming they chose set 1 with code C0001 
 									afptr = fopen("addon.txt", "r");
-									for (i=0; i<2; i++){
+									for (i=0; i<1; i++){
 										fscanf(afptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
 									}		
 									total = meal_price * quantity;
@@ -260,7 +263,7 @@ void order() {
 								    break;
 								case '2':
 									afptr = fopen("addon.txt", "r");
-									for (i=0; i<3; i++){
+									for (i=0; i<2; i++){
 										fscanf(afptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
 									}							
 									total = meal_price * quantity;
@@ -272,7 +275,7 @@ void order() {
 								    break;
 								case '3':
 									afptr = fopen("addon.txt", "r");
-									for (i=0; i<4; i++){
+									for (i=0; i<3; i++){
 										fscanf(afptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
 									}						
 									total = meal_price * quantity;
@@ -284,7 +287,7 @@ void order() {
 								    break;
 								case '4':
 									afptr = fopen("addon.txt", "r");
-									for (i=0; i<5; i++){
+									for (i=0; i<4; i++){
 										fscanf(afptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
 									}						
 									total = meal_price * quantity;						
@@ -296,7 +299,7 @@ void order() {
 								    break;
 								case '5':
 									afptr = fopen("addon.txt", "r");
-									for (i=0; i<6; i++){
+									for (i=0; i<5; i++){
 										fscanf(afptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
 									}					
 									total = meal_price * quantity;
@@ -316,9 +319,11 @@ void order() {
 						//price = 0; //declare price of certain order 0 because to prevent added into total
 						//total = 0; //declare total in order 0 because to prevent added into grand total
 						printf("Invalid item. \n");
-					} //end else for menu option A or C			
-					//grand_total += total;	
-				} //end of while loop					
+					} //end else for menu option A or C
+                    tfptr = fopen("trans.txt", "a+");
+                    fprintf(tfptr, "%u:%u:%.2f\n", combo_trans, ala_trans, grand_total);
+                    fclose(tfptr);
+				} //end of while loop
 				break;
 			case 2:
 				printf("This option allows user to edit meals!\n");
@@ -330,10 +335,15 @@ void order() {
 				printf("This option allows user to delete meals!\n");
 				break;
 			case 5:
-				print_menu(meal_code, meal_name, meal_price, meal_description);										
+				print_menu();
 				break;		
-			case 6:
-		        daily_transactions(combo_trans, ala_trans, grand_total);	      
+			case 6:								
+				tfptr = fopen("trans.txt", "r");
+				while( fgets(str, sizeof(str), tfptr)!=NULL ){						       										   						    							
+					sscanf(str, "%u:%u:%f", &combo_trans, &ala_trans, &grand_total);
+				}											
+				daily_transactions(combo_trans, ala_trans, grand_total);	      				
+				fclose(tfptr);	
 				break;	
 			case 7:
 				printf("^o^ Thanks for coming! ^o^ \n");
@@ -345,3 +355,5 @@ void order() {
 
 	} while (order_number != 7);						
 }
+
+
