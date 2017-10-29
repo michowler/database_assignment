@@ -41,7 +41,7 @@ void print_receipt(int combo_trans, int ala_trans, float total){
 	puts("----------------------------------------------------------");
 	puts("=======================YOUR RECEIPT=======================");	
 	puts("----------------------------------------------------------");
-	puts ("QTY\t|\tITEM\t\t\t|\tPRICE");	
+	puts ("QTY\t|\tITEM\t\t\t|\tPRICE(RM)");	
 	for (i = 0; i < trans; i++) {
 		fgets(text_file, 200, (FILE*)fp);
 		printf("%s\n", text_file);
