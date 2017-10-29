@@ -126,11 +126,10 @@ int purchase(void){
 		scanf("%s", meal_choice);
 		
 		tfptr = fopen("trans.txt", "a"); //open for appending by case
-
 		if (strcmp(meal_choice, "-1") == 0){	//when input sentinel value then print receipt and go back to menu
 			print_receipt(combo_trans, ala_trans, grand_total);										
 			order();
-		} 
+		} 		
 		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'C' || meal_choice[0] =='c') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0' && meal_choice[4] >= '1' && meal_choice[4] <= '5'){
 			printf("Enter quantity of order. \n");
 			scanf("%d", &quantity); 
@@ -317,7 +316,6 @@ void order(void) {
 		puts("6. Show daily transaction");
 		puts("7. Exit");
 		puts("------------------------------------");
-
 		printf("Please enter order option (1-7): "); //infinity loop occurs when entered float
 		scanf("%d", &order_number);
 
