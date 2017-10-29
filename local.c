@@ -120,22 +120,22 @@ int purchase(void){
 	double meal_price;
 	char meal_description[35];	
 
-	fptr = fopen("receipt.txt", "w"); //clear file before appending		
-	while(strcmp(meal_choice, "-1") != 0) {	//while user's meal code is not sentinel value
+	fptr = fopen("receipt.txt", "w"); //clear file before appending for purchase		
+	while(strcmp(meal_choice, "-1") != 0) {	//while user's meal code is not sentinel value -1
 		printf("Please enter a meal code (-1 to exit purchase). Example: C0001.\n");		
 		scanf("%s", meal_choice);
 		
-		tfptr = fopen("trans.txt", "a+");
+		tfptr = fopen("trans.txt", "a"); //open for appending by case
 
-		if (meal_choice[0] == '-' && meal_choice[1] == '1') {	//when input sentinel value then print receipt and go back to menu
+		if (strcmp(meal_choice, "-1") == 0){	//when input sentinel value then print receipt and go back to menu
 			print_receipt(combo_trans, ala_trans, grand_total);										
 			order();
 		} 
-		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'C' || meal_choice[0] =='c') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0' && (meal_choice[4] == '1' || meal_choice[4] == '2' || meal_choice[4] == '3' || meal_choice[4] == '4' || meal_choice[4] == '5')){
+		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'C' || meal_choice[0] =='c') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0' && meal_choice[4] >= '1' && meal_choice[4] <= '5'){
 			printf("Enter quantity of order. \n");
-			scanf("%d", &quantity);
-			
-			fptr = fopen("receipt.txt", "a"); //opens receipt txt file for append
+			scanf("%d", &quantity); 
+
+			fptr = fopen("receipt.txt", "a"); 
 			if( (mfptr = fopen("combo.txt", "r"))==NULL ){
 				printf("File not found\n");
 			}													
@@ -149,7 +149,7 @@ int purchase(void){
 							total = meal_price * quantity;
 							grand_total += total;																	
 							fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
-							fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total);					
+							fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
 							print_order(quantity, meal_name, meal_price, grand_total);
 						fclose(mfptr);									
 					    break;
@@ -211,7 +211,7 @@ int purchase(void){
 				fclose(fptr); //close the file				
 			}		
 		} 
-		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'A' || meal_choice[0] =='a') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0' && (meal_choice[4] == '1' || meal_choice[4] == '2' || meal_choice[4] == '3' || meal_choice[4] == '4' || meal_choice[4] == '5')) {
+		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'A' || meal_choice[0] =='a') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0' && meal_choice[4] >= '1' && meal_choice[4] <= '5') {
 			printf("Enter quantity of order. \n");
 			scanf("%d", &quantity);
 
@@ -328,7 +328,7 @@ void order(void) {
 		switch(order_number){
 			case 1:			
 				purchase();
-				exit(0); //exit when 0 is returned 
+				exit(0); //exit function when 0 is returned 
 			case 2:
 				printf("This option allows user to edit meals!\n");
 				break;
@@ -343,8 +343,8 @@ void order(void) {
 				break;		
 			case 6:																	
 				tfptr = fopen("trans.txt", "r");
-					while( fgets(str, sizeof(str), tfptr)!=NULL ){ //fgets will equal to null when reaches last line
-					    sscanf(str, "%u:%u:%f", &cTrans, &aTrans, &trans_total);
+					while( fgets(str, sizeof(str), tfptr)!=NULL ){ //fgets will equal to null when it reaches last line
+					    sscanf(str, "%u:%u:%f", &cTrans, &aTrans, &trans_total); //parse the string in str with sscanf()
 					    c_trans += cTrans;
 					    a_trans += aTrans;				    
 					    gTotal += trans_total;
@@ -356,8 +356,7 @@ void order(void) {
 				printf("^o^ Thanks for coming! ^o^ \n");
 				tfptr = fopen("trans.txt", "w"); //clear file before exiting
 				fclose(tfptr);
-				exit(0);
-				break;			
+				exit(0);										
 			default:
 				break;
 		}
