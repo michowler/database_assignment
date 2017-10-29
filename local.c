@@ -131,7 +131,7 @@ int purchase(void){
 			print_receipt(combo_trans, ala_trans, grand_total);										
 			order();
 		} 
-		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'C' || meal_choice[0] =='c') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0'){
+		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'C' || meal_choice[0] =='c') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0' && (meal_choice[4] == '1' || meal_choice[4] == '2' || meal_choice[4] == '3' || meal_choice[4] == '4' || meal_choice[4] == '5')){
 			printf("Enter quantity of order. \n");
 			scanf("%d", &quantity);
 			
@@ -211,7 +211,7 @@ int purchase(void){
 				fclose(fptr); //close the file				
 			}		
 		} 
-		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'A' || meal_choice[0] =='a') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0') {
+		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'A' || meal_choice[0] =='a') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0' && (meal_choice[4] == '1' || meal_choice[4] == '2' || meal_choice[4] == '3' || meal_choice[4] == '4' || meal_choice[4] == '5')) {
 			printf("Enter quantity of order. \n");
 			scanf("%d", &quantity);
 
