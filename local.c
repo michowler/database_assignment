@@ -120,7 +120,7 @@ int purchase(void){
 	double meal_price;
 	char meal_description[35];	
 
-	fptr = fopen("receipt.txt", "w");				
+	fptr = fopen("receipt.txt", "w"); //clear file before appending		
 	while(strcmp(meal_choice, "-1") != 0) {	//while user's meal code is not sentinel value
 		printf("Please enter a meal code (-1 to exit purchase). Example: C0001.\n");		
 		scanf("%s", meal_choice);
@@ -328,7 +328,7 @@ void order(void) {
 		switch(order_number){
 			case 1:			
 				purchase();
-				exit(0); //exit when 0 is returned in purchase
+				exit(0); //exit when 0 is returned 
 			case 2:
 				printf("This option allows user to edit meals!\n");
 				break;
@@ -354,6 +354,8 @@ void order(void) {
 				break;	
 			case 7:
 				printf("^o^ Thanks for coming! ^o^ \n");
+				tfptr = fopen("trans.txt", "w"); //clear file before exiting
+				fclose(tfptr);
 				exit(0);
 				break;			
 			default:
