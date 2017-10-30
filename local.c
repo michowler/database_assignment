@@ -67,8 +67,8 @@ void daily_transactions(int combo_trans, int ala_trans, float grand_total){
 	puts("------------------------------------");
 }
 
-//function to display all combo meals available
-int print_menu(){
+//function to display menu
+int print_menu(void){
 	char meal_code[6], meal_name[25], meal_description[100];
 	double meal_price;
 	int i;
@@ -78,7 +78,7 @@ int print_menu(){
 	puts("---------------------------------------------------------------------------------------------------------");
 	puts("----------------------------------------COMBO MEALS------------------------------------------------------");
 	puts("----------------------------------------------------------------------------------------------------------");
-	printf("%-16s%-24s%-19s%-18s\n\n","Menu Code","Meal Name","Meal Price","Meal Description");
+	printf("%-16s%-24s%-19s%-18s\n\n","Menu Code","Meal Name","Meal Price(RM)","Meal Description");
 	if ((cfp = fopen("combo.txt", "r"))== NULL){
 	   puts("File could not be found");
 	} else {
@@ -87,13 +87,13 @@ int print_menu(){
 			printf("%-15s%-27s%-17.2f%-12s\n", meal_code,meal_name,meal_price,meal_description);				
 		}    
 	} 
-	puts("------------------------------------------------------------------------------\n");
+	puts("----------------------------------------------------------------------------------------------------------\n");
 	fclose(cfp); //close the file   
 
 	puts("------------------------------------------------------------------------------");
 	puts(" -----------------------------------ADD-ONS---------------------------------- ");
 	puts("------------------------------------------------------------------------------");
-	printf("%-16s%-24s%-19s%-18s\n\n","Menu Code","Meal Name","Meal Price","Meal Description");
+	printf("%-16s%-24s%-19s%-18s\n\n","Menu Code","Meal Name","Meal Price(RM)","Meal Description");
 	if ((afp = fopen("addon.txt", "r"))== NULL){
 	   puts("File could not be found");
 	} else {
@@ -133,11 +133,7 @@ int purchase(void){
 		} 		
 		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'C' || meal_choice[0] =='c') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0' && meal_choice[4] >= '1' && meal_choice[4] <= '5'){
 			printf("Enter quantity of order. \n");
-			scanf("%d", &quantity); 
-			while(quantity <0){				
-				printf("Enter valid quantity of order. \n");
-				scanf("%d", &quantity); 
-			}						
+			scanf("%d", &quantity); 					
 			fptr = fopen("receipt.txt", "a"); 
 			if( (mfptr = fopen("combo.txt", "r"))==NULL ){
 				printf("File not found\n");
@@ -149,9 +145,9 @@ int purchase(void){
 							for (i=0; i<1; i++){
 								fscanf(mfptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
 							}																																					
-							total = meal_price * quantity;
-							grand_total += total;
-							if (quantity >= 1) {
+							total = meal_price * quantity; //speficic total
+							grand_total += total; //speficic grand total
+							if (quantity >= 1) { //prevent invalid data in receipt and trans
 								combo_trans++;
 								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
 								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
@@ -227,11 +223,7 @@ int purchase(void){
 		} 
 		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'A' || meal_choice[0] =='a') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0' && meal_choice[4] >= '1' && meal_choice[4] <= '5') {
 			printf("Enter quantity of order. \n");
-			scanf("%d", &quantity); 
-			while(quantity <0){				
-				printf("Enter valid quantity of order. \n");
-				scanf("%d", &quantity); 				
-			}	
+			scanf("%d", &quantity); 	
 			fptr = fopen("receipt.txt", "a"); 
 			if( (afptr = fopen("addon.txt", "r"))==NULL ){
 				printf("File not found\n");										
@@ -320,7 +312,7 @@ int purchase(void){
 		} else {			
 			printf("Invalid item. \n");
 		} //end else for menu option A or C		                				
-        fclose(tfptr);
+        fclose(tfptr); //close the trans file	
 	} //end of while loop
 	return 0;
 }
@@ -353,6 +345,7 @@ void order(void) {
 		} 		
 		switch(order_number){
 			case 1:			
+				print_menu(); 
 				purchase();
 				exit(0); //exit function when 0 is returned 
 			case 2:
