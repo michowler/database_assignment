@@ -113,9 +113,9 @@ int purchase(void){
 	FILE *tfptr; //flie pointer for trans text file	
 	FILE *mfptr; //flie pointer for combo text file
 	FILE *afptr; //flie pointer for addon text file
-	 int quantity=0, i;	
+	int quantity=0; 	
 	float total=0, grand_total=0;	
-	unsigned int combo_trans=0, ala_trans=0;
+	unsigned int combo_trans=0, ala_trans=0, i;
 	char meal_code[6];
 	char meal_name[30];
 	double meal_price;
@@ -134,8 +134,7 @@ int purchase(void){
 		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'C' || meal_choice[0] =='c') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0' && meal_choice[4] >= '1' && meal_choice[4] <= '5'){
 			printf("Enter quantity of order. \n");
 			scanf("%d", &quantity); 
-			while(quantity <0){
-				fflush(stdin);
+			while(quantity <0){				
 				printf("Enter valid quantity of order. \n");
 				scanf("%d", &quantity); 
 			}						
@@ -164,14 +163,13 @@ int purchase(void){
 						mfptr = fopen("combo.txt", "r");
 							for (i=0; i<2; i++){
 								fscanf(mfptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
-							}						
-							combo_trans++;
+							}													
 							total = meal_price * quantity;
 							grand_total += total;																																	
 							if (quantity >= 1) {
 								combo_trans++;
 								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
-								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total);
 								print_order(quantity, meal_name, meal_price, grand_total);
 							}					    
 						fclose(mfptr);							
@@ -186,7 +184,7 @@ int purchase(void){
 							if (quantity >= 1) {
 								combo_trans++;
 								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
-								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total);
 								print_order(quantity, meal_name, meal_price, grand_total);
 							}		
 						fclose(mfptr);							    
@@ -201,7 +199,7 @@ int purchase(void){
 							if (quantity >= 1) {
 								combo_trans++;
 								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
-								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total);
 								print_order(quantity, meal_name, meal_price, grand_total);
 							}		
 						fclose(mfptr);						    
@@ -216,7 +214,7 @@ int purchase(void){
 							if (quantity >= 1) {
 								combo_trans++;
 								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
-								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total);
 								print_order(quantity, meal_name, meal_price, grand_total);
 							}		
 						fclose(mfptr);												    
@@ -230,8 +228,7 @@ int purchase(void){
 		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'A' || meal_choice[0] =='a') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0' && meal_choice[4] >= '1' && meal_choice[4] <= '5') {
 			printf("Enter quantity of order. \n");
 			scanf("%d", &quantity); 
-			while(quantity <0){
-				fflush(stdin);
+			while(quantity <0){				
 				printf("Enter valid quantity of order. \n");
 				scanf("%d", &quantity); 				
 			}	
@@ -250,7 +247,7 @@ int purchase(void){
 							if (quantity >= 1) {
 								ala_trans++;
 								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
-								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								fprintf(tfptr, "%u:%u:%.2f\n", 0, 1, total); 
 								print_order(quantity, meal_name, meal_price, grand_total);
 							}				
 						fclose(afptr);							
@@ -265,7 +262,7 @@ int purchase(void){
 							if (quantity >= 1) {
 								ala_trans++;
 								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
-								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								fprintf(tfptr, "%u:%u:%.2f\n", 0, 1, total); 
 								print_order(quantity, meal_name, meal_price, grand_total);
 							}		
 						fclose(afptr);							
@@ -280,7 +277,7 @@ int purchase(void){
 							if (quantity >= 1) {
 								ala_trans++;
 								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
-								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								fprintf(tfptr, "%u:%u:%.2f\n", 0, 1, total); 
 								print_order(quantity, meal_name, meal_price, grand_total);
 							}						    						
 						fclose(afptr);						
@@ -295,7 +292,7 @@ int purchase(void){
 							if (quantity >= 1) {
 								ala_trans++;
 								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
-								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								fprintf(tfptr, "%u:%u:%.2f\n", 0, 1, total); 
 								print_order(quantity, meal_name, meal_price, grand_total);
 							}						    						
 						fclose(afptr);						
@@ -310,7 +307,7 @@ int purchase(void){
 							if (quantity >= 1) {
 								ala_trans++;
 								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
-								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								fprintf(tfptr, "%u:%u:%.2f\n", 0, 1, total);
 								print_order(quantity, meal_name, meal_price, grand_total);
 							}		
 						fclose(afptr);									    
@@ -350,8 +347,7 @@ void order(void) {
 		printf("Please enter order option (1-7): "); //infinity loop occurs when entered float
 		scanf("%d", &order_number);
 
-		while (order_number > 7 || order_number < 1) { //prompt user for purchase again until enters exit option (7)
-			fflush(stdin);
+		while (order_number > 7 || order_number < 1) { //prompt user for purchase again until enters exit option (7)			
 			printf("Please enter a valid order option (1-7): ");
 			scanf("%d", &order_number);		
 		} 		
@@ -383,7 +379,7 @@ void order(void) {
 				fclose(tfptr);									
 				break;	
 			case 7:
-				printf("^o^ Thanks for coming! ^o^ \n");
+				printf("^o^ Thanks for coming. Have a nice day! ^o^ \n");
 				tfptr = fopen("trans.txt", "w"); //clear file before exiting
 				fclose(tfptr);
 				exit(0);										

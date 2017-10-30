@@ -1,1 +1,5 @@
-25             Teatime Saver                     174.75           
+1              Lunch Deal Set A                  10.99            
+1              Lunch Deal Set B                  12.99            
+1              Teatime Saver                     6.99             
+1              Dinner Deal Set A                 12.99            
+1              Dinner Deal Set B                 14.99            
