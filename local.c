@@ -53,6 +53,7 @@ void print_receipt(int combo_trans, int ala_trans, float total){
 	puts("----------------------------------------------------------");
 	puts("===================THANKS FOR PURCHASING==================");
 	puts("----------------------------------------------------------");
+	fclose(fp);
 }
 
 void daily_transactions(int combo_trans, int ala_trans, float grand_total){
@@ -112,7 +113,7 @@ int purchase(void){
 	FILE *tfptr; //flie pointer for trans text file	
 	FILE *mfptr; //flie pointer for combo text file
 	FILE *afptr; //flie pointer for addon text file
-	unsigned int quantity=0, i;	
+	 int quantity=0, i;	
 	float total=0, grand_total=0;	
 	unsigned int combo_trans=0, ala_trans=0;
 	char meal_code[6];
@@ -126,14 +127,18 @@ int purchase(void){
 		scanf("%s", meal_choice);
 		
 		tfptr = fopen("trans.txt", "a"); //open for appending by case
-		if (strcmp(meal_choice, "-1") == 0){	//when input sentinel value then print receipt and go back to menu
+		if (strcmp(meal_choice, "-1") == 0){	//when input sentinel value then print receipt and go back to menu			
 			print_receipt(combo_trans, ala_trans, grand_total);										
 			order();
 		} 		
 		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'C' || meal_choice[0] =='c') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0' && meal_choice[4] >= '1' && meal_choice[4] <= '5'){
 			printf("Enter quantity of order. \n");
 			scanf("%d", &quantity); 
-
+			while(quantity <0){
+				fflush(stdin);
+				printf("Enter valid quantity of order. \n");
+				scanf("%d", &quantity); 
+			}						
 			fptr = fopen("receipt.txt", "a"); 
 			if( (mfptr = fopen("combo.txt", "r"))==NULL ){
 				printf("File not found\n");
@@ -144,12 +149,15 @@ int purchase(void){
 						mfptr = fopen("combo.txt", "r");
 							for (i=0; i<1; i++){
 								fscanf(mfptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
-							}																														
+							}																																					
 							total = meal_price * quantity;
-							grand_total += total;																	
-							fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
-							fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
-							print_order(quantity, meal_name, meal_price, grand_total);
+							grand_total += total;
+							if (quantity >= 1) {
+								combo_trans++;
+								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
+								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								print_order(quantity, meal_name, meal_price, grand_total);
+							}																							
 						fclose(mfptr);									
 					    break;
 					case '2':
@@ -160,60 +168,73 @@ int purchase(void){
 							combo_trans++;
 							total = meal_price * quantity;
 							grand_total += total;																																	
-							fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);
-							fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total);				
-							print_order(quantity, meal_name, meal_price, grand_total);			    
+							if (quantity >= 1) {
+								combo_trans++;
+								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
+								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								print_order(quantity, meal_name, meal_price, grand_total);
+							}					    
 						fclose(mfptr);							
 					    break;
 					case '3':
 						mfptr = fopen("combo.txt", "r");
 							for (i=0; i<3; i++){
 								fscanf(mfptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
-							}						
-							combo_trans++;
+							}													
 							total = meal_price * quantity;
 							grand_total += total;																																
-							fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);		
-							fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total);			
-							print_order(quantity, meal_name, meal_price, grand_total);
+							if (quantity >= 1) {
+								combo_trans++;
+								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
+								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								print_order(quantity, meal_name, meal_price, grand_total);
+							}		
 						fclose(mfptr);							    
 					    break;
 					case '4':
 						mfptr = fopen("combo.txt", "r");
 							for (i=0; i<4; i++){
 								fscanf(mfptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
-							}
-							combo_trans++;							
+							}													
 							total = meal_price * quantity;
 							grand_total += total;																	
-							fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);	
-							fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total);		
-							print_order(quantity, meal_name, meal_price, grand_total);
+							if (quantity >= 1) {
+								combo_trans++;
+								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
+								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								print_order(quantity, meal_name, meal_price, grand_total);
+							}		
 						fclose(mfptr);						    
 					    break;
 					case '5':
 						mfptr = fopen("combo.txt", "r");
 							for (i=0; i<5; i++){
 								fscanf(mfptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);
-							}
-							combo_trans++;							
+							}														
 							total = meal_price * quantity;
 							grand_total += total;																									
-							fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price);	
-							fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total);			
-							print_order(quantity, meal_name, meal_price, grand_total);
+							if (quantity >= 1) {
+								combo_trans++;
+								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
+								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								print_order(quantity, meal_name, meal_price, grand_total);
+							}		
 						fclose(mfptr);												    
 					    break;		     
 					default:
-						total=0;																	
+						total=0, combo_trans=0;																	
 				}					
 				fclose(fptr); //close the file				
 			}		
 		} 
 		else if (strlen(meal_choice) == 5 && (meal_choice[0] == 'A' || meal_choice[0] =='a') && meal_choice[1] == '0' && meal_choice[2] == '0' && meal_choice[3] == '0' && meal_choice[4] >= '1' && meal_choice[4] <= '5') {
 			printf("Enter quantity of order. \n");
-			scanf("%d", &quantity);
-
+			scanf("%d", &quantity); 
+			while(quantity <0){
+				fflush(stdin);
+				printf("Enter valid quantity of order. \n");
+				scanf("%d", &quantity); 				
+			}	
 			fptr = fopen("receipt.txt", "a"); 
 			if( (afptr = fopen("addon.txt", "r"))==NULL ){
 				printf("File not found\n");										
@@ -223,69 +244,79 @@ int purchase(void){
 						afptr = fopen("addon.txt", "r");
 							for (i=0; i<1; i++){
 								fscanf(afptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
-							}
-							ala_trans++;			
+							}								
 							total = meal_price * quantity;						
 							grand_total += total;																																			
-							fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);												
-							fprintf(tfptr, "%u:%u:%.2f\n", 0, 1, total);			
-							print_order(quantity, meal_name, meal_price, grand_total);			
+							if (quantity >= 1) {
+								ala_trans++;
+								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
+								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								print_order(quantity, meal_name, meal_price, grand_total);
+							}				
 						fclose(afptr);							
 					    break;
 					case '2':
 						afptr = fopen("addon.txt", "r");
 							for (i=0; i<2; i++){
 								fscanf(afptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
-							}
-							ala_trans++;							
+							}													
 							total = meal_price * quantity;						
 							grand_total += total;																															
-							fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);										
-							fprintf(tfptr, "%u:%u:%.2f\n", 0, 1, total);
-							print_order(quantity, meal_name, meal_price, grand_total);
+							if (quantity >= 1) {
+								ala_trans++;
+								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
+								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								print_order(quantity, meal_name, meal_price, grand_total);
+							}		
 						fclose(afptr);							
 					    break;
 					case '3':
 						afptr = fopen("addon.txt", "r");
 							for (i=0; i<3; i++){							
 								fscanf(afptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
-							}		
-							ala_trans++;				
+							}													
 							total = meal_price * quantity;						
 							grand_total += total;							
-							fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);	
-							fprintf(tfptr, "%u:%u:%.2f\n", 0, 1, total);
-							print_order(quantity, meal_name, meal_price, grand_total);					    						
+							if (quantity >= 1) {
+								ala_trans++;
+								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
+								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								print_order(quantity, meal_name, meal_price, grand_total);
+							}						    						
 						fclose(afptr);						
 					    break;
 					case '4':
 						afptr = fopen("addon.txt", "r");
 							for (i=0; i<4; i++){
 								fscanf(afptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
-							}						
-							ala_trans++;
+							}													
 							total = meal_price * quantity;												
 							grand_total += total;																														
-							fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);
-							fprintf(tfptr, "%u:%u:%.2f\n", 0, 1, total);
-							print_order(quantity, meal_name, meal_price, grand_total);				    						
+							if (quantity >= 1) {
+								ala_trans++;
+								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
+								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								print_order(quantity, meal_name, meal_price, grand_total);
+							}						    						
 						fclose(afptr);						
 					    break;
 					case '5':
 						afptr = fopen("addon.txt", "r");
 							for (i=0; i<5; i++){
 								fscanf(afptr, "%5[^:]:%[^:]:%lf:%[^\n]\n", meal_code, meal_name, &meal_price, meal_description);	
-							}		
-							ala_trans++;			
+							}												
 							total = meal_price * quantity;						
 							grand_total += total;																												
-							fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);											
-							fprintf(tfptr, "%u:%u:%.2f\n", 0, 1, total);
-							print_order(quantity, meal_name, meal_price, grand_total);
+							if (quantity >= 1) {
+								ala_trans++;
+								fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal_name, meal_price*quantity);																
+								fprintf(tfptr, "%u:%u:%.2f\n", 1, 0, total); //append into file the trans and total			
+								print_order(quantity, meal_name, meal_price, grand_total);
+							}		
 						fclose(afptr);									    
 					    break;		     
 					default:
-						total=0;													
+						total=0, ala_trans=0;													
 				}		
 				fclose(fptr); //close the receipt file	
 			} //end else for file found			
@@ -320,6 +351,7 @@ void order(void) {
 		scanf("%d", &order_number);
 
 		while (order_number > 7 || order_number < 1) { //prompt user for purchase again until enters exit option (7)
+			fflush(stdin);
 			printf("Please enter a valid order option (1-7): ");
 			scanf("%d", &order_number);		
 		} 		
