@@ -3,3 +3,6 @@ C0002:Lunch Deal Set B:12.99:Burger, fries, and drink
 C0003:Teatime Saver:6.99: Nugget and drink
 C0004:Dinner Deal Set A:12.99:2 pcs fried chicken and drink
 C0005:Dinner Deal Set B:14.99:2 pcs fried chicken, salad, and drink
+C0006:Spicy Chicken Wings:12.99:Served with fries and eggs
+C0007:Chicken wings:6.99:Healthy choice
+C00010:Green Beans with Pudding:8.99:Comes with ice cream
