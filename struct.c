@@ -50,7 +50,7 @@ int main()
     add(dist1, dist2, &dist3); 
 
     //passing structure variables dist1 and dist2 by value whereas passing structure variable dist3 by reference
-    printf("\nSum of distances = %d\'-%.1f\"", dist3.feet, dist3.inch);
+    printf("\nSum of distances = %d\'-%.1f\"\n", dist3.feet, dist3.inch);
 
     return 0;
 }
@@ -65,3 +65,17 @@ void add(struct distance d1,struct distance d2, struct distance *d3)
          ++d3->feet;
     }
 }
+
+// struct foo
+// {
+//   int x;
+//   float y;
+// };
+
+// struct foo var;
+// struct foo* pvar;
+
+// var.x = 5;
+// (&var)->y = 14.3;
+// pvar->y = 22.4;
+// (*pvar).x = 6;

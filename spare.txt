@@ -1,0 +1,11 @@
+C0001:Lunch Deal Set A:10.99:Burger and drink
+C0002:Lunch Deal Set B:12.99:Burger, fries, and drink
+C0003:Teatime Saver:6.99: Nugget and drink
+C0004:Dinner Deal Set A:12.99:2 pcs fried chicken and drink
+C0005:Dinner Deal Set B:14.99:2 pcs fried chicken, salad, and drink
+
+A0001:Soft drink:3.99:Any soft drink
+A0002:Salad:3.99:Without nut
+A0003:Burger:6.99: Chicken or beef
+A0004:Fried chicken 1 piece:4.99:Original or Cheese
+A0005:Fried chicken 2 pieces:8.99:Original or cheese
