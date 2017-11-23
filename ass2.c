@@ -16,10 +16,10 @@ struct Meal {
 };
 
 //prototype of functions used
-void add_meal();
+void add_meal(), order();
+int editCombo(char *menuCode, struct Meal meal), editAddon(char *menuCode, struct Meal meal);
 int print_menu(), purchase();
-void daily_trans(int combo_trans, int ala_trans, float grand_total);
-void order(), print_order(int quantity, char *item, float price, float total), print_receipt(int combo_trans, int ala_trans, int total_quantity, float total);
+void daily_trans(int combo_trans, int ala_trans, float grand_total),print_order(int quantity, char *item, float price, float total), print_receipt(int combo_trans, int ala_trans, int total_quantity, float total);
 
 int main(void) {		
 	order(); //entry function
@@ -40,7 +40,7 @@ void print_order(int quantity, char *item, float price, float total) {
 void print_receipt(int combo_trans, int ala_trans, int total_quantity, float total){
 	FILE *fp; //pointer for receipt txt file
 	int i, trans;
-	char text_file[200];	
+	char text_file[200];
 
 	fp = fopen("receipt.txt", "r"); 	
 	trans = ala_trans + combo_trans; //calculate total trans to print out for each line	
@@ -50,9 +50,9 @@ void print_receipt(int combo_trans, int ala_trans, int total_quantity, float tot
 	puts ("QTY\t|\tITEM\t\t\t|\tTOTAL(RM)");	
 	for (i = 0; i < trans; i++) {
 		fgets(text_file, 200, (FILE*)fp);
-		printf("%s\n", text_file);
+		printf("%s", text_file);
 	}
-	printf("Total Orders : %d\n", total_quantity);
+	printf("\nTotal Orders : %d\n", total_quantity);
 	printf("6%% GST : RM %.2f\n", (total * 1.06) * 0.06);
 	printf("Subtotal (excl gst) : RM %.2f\n",total);
 	printf("Subtotal (incl gst): RM %.2f\n", total * 1.06);	
@@ -77,10 +77,10 @@ void add_meal(){
 	int add, countC1=0,countC2=0, countA1=0, countA2=0 ;	
 	struct Meal meal;	
 	char menucode[6];
-	FILE *cfptr; //pointer for combo text file
-	FILE *cfp; //pointer for combo text file	
-	FILE *afptr; //pointer for addon text file  
-	FILE *afp;
+	FILE *cfptr; //pointer for combo text file to append
+	FILE *cfp; //pointer for combo text file to write	
+	FILE *afptr; //pointer for addon text file to append
+	FILE *afp; //pointer for addon text file to write	
 
 	printf("-------------------------------\n");
 	printf("	ADD MEAL\n");
@@ -123,7 +123,7 @@ void add_meal(){
 					scanf(" %f", &(meal.price));
 					printf("Enter combo descriptions: \n");
 					scanf(" %[^\n]", meal.description);
-					fprintf(cfptr,"%s:%s:%.2f:%s\n",menucode,meal.name,meal.price,meal.description);	
+					fprintf(cfptr,"\n%s:%s:%.2f:%s\n",menucode,meal.name,meal.price,meal.description);	
 				}
 										
 			}//end else statement
@@ -161,7 +161,7 @@ void add_meal(){
 					scanf(" %f", &(meal.price));
 					printf("Enter addon descriptions: \n");
 					scanf(" %[^\n]", meal.description);
-					fprintf(afptr,"%s:%s:%.2f:%s\n",menucode,meal.name,meal.price,meal.description);
+					fprintf(afptr,"\n%s:%s:%.2f:%s\n",menucode,meal.name,meal.price,meal.description);
 				}		
 												
 			}//end else statement
@@ -172,15 +172,80 @@ void add_meal(){
 	}				
 }
 
-/*This option allows user to edit the information of the menu. When this option is
-	selected, the user will be asked to enter the menu code to indicate the menu need
-	to be edited. If the menu is found, then the user will be given the option to choose
-	the data that need to be edited. There are only three fields can be edit; there are
-	menu name, price and descriptions. Menu code is not allowed to be edited. If the
-	menu could not be found, print message “Item not found”.
-	Once user confirmed the changes, the new data will be stored at the text file.*/
+void delete_meal()
+{		
+	FILE *dtemp;
+	FILE *cptr;
+	FILE *aptr;	
+	char mcode[6];
+	struct Meal meal;
+	int type = 0; //Not found	
 	
+    printf("----------------------------\n");//function for deleting a data in the file
+    printf("      DELETE MEAL\n");
+    printf("----------------------------\n");
+    printf("Enter menu code:\n");
+    scanf("%5s", mcode);//user input
 
+    cptr = fopen("combo.txt", "r");//creating a new file            
+    while(!feof(cptr))
+    {	    	    	
+    	fscanf(cptr, " %[^:]:%[^:]:%f:%[^\n]\n", meal.mcode, meal.name, &meal.price, meal.description);
+        if(strcmp(mcode, meal.mcode) == 0)
+        {
+            type = 1; //combo
+        }       
+    }fclose(cptr);
+    
+    if(type == 0){
+        aptr = fopen("addon.txt", "r");                
+        while(!feof(aptr))
+        {
+        	fscanf(aptr, " %[^:]:%[^:]:%f:%[^\n]\n", meal.mcode, meal.name, &meal.price, meal.description);
+            if(strcmp(mcode, meal.mcode) == 0)
+            {
+                type = 2; //addon
+            }            
+        }fclose(aptr);
+    }
+
+    switch(type){//switching to search which value matches the input
+        case 1:           
+            dtemp = fopen("deletetemp.txt", "w");//opening file for write.            
+            cptr = fopen("combo.txt", "r");
+            while(!feof(cptr))
+            {
+                fscanf(cptr, " %[^:]:%[^:]:%f:%[^\n]\n", meal.mcode, meal.name, &meal.price, meal.description);
+                if (strcmp(mcode, meal.mcode) != 0){                
+                    fprintf(dtemp, "%s:%s:%.2f:%s\n", meal.mcode, meal.name, meal.price, meal.description);
+                }               
+            }fclose(cptr);
+            remove("combo.txt");//removing one file and replacing it with another
+            rename("deletetemp.txt", "combo.txt");
+            fclose(dtemp);//file close
+            printf("Menu with code %s deleted!\n", mcode);
+	        break;
+        case 2:            
+            dtemp = fopen("deletetemp.txt", "w");
+            aptr = fopen("addon.txt", "r");
+            while(!feof(aptr))
+            {
+                fscanf(aptr, " %[^:]:%[^:]:%f:%[^\n]\n", meal.mcode, meal.name, &meal.price, meal.description);
+                if(strcmp(mcode, meal.mcode) != 0)
+                {
+                    fprintf(dtemp, "%s:%s:%.2f:%s\n", meal.mcode, meal.name, meal.price, meal.description);
+                }
+            }fclose(aptr);
+            remove("addon.txt");
+            rename("deletetemp.txt", "addon.txt");
+            fclose(dtemp);
+            printf("Menu with code %s deleted!\n", mcode);        
+	        break;
+        default:
+            printf("This is an invalid menu code.\n");
+        	break;
+    }
+}
 //function to display menu
 int print_menu(void)
 {
@@ -221,6 +286,134 @@ int print_menu(void)
 	return 0;
 }
 
+void edit_meal(){
+	int option;
+	char mcode[6];
+	struct Meal newValues;//user input
+	struct Meal meal;//user input
+	FILE *combo = fopen("combo.txt", "r");
+	FILE *addon = fopen("addon.txt", "r");
+
+	printf("----------------------------\n");//function to edit the files structure
+    printf("      EDIT MEAL\n");
+    printf("----------------------------\n");
+    printf("Enter meal code:\n");
+    scanf("%s", mcode);   
+
+    while(!feof(combo)){
+    	fscanf(combo, "%[^:]:%[^:]:%f:%[^\n]\n", meal.mcode,meal.name,&meal.price,meal.description);
+        if(strcmp(mcode, meal.mcode)==0){//compare two values
+            if (strcmp(mcode, meal.mcode)==0) {
+            	printf("Enter option (1 to 3) to edit: \n");
+            	printf("[1] Name \n");
+            	printf("[2] Price \n");
+            	printf("[3] Description \n");
+            	scanf("%d", &option);
+            	break;
+            }
+        }     
+    }fclose(combo);//closing combo
+
+    while(!feof(addon)){
+    	fscanf(addon, "%[^:]:%[^:]:%f:%[^\n]\n", meal.mcode,meal.name,&meal.price,meal.description);
+        if(strcmp(mcode, meal.mcode)==0){//compare two values
+            if (strcmp(mcode, meal.mcode)==0) {
+            	printf("Enter option (1 to 3) to edit: \n");
+            	printf("[1] Name \n");
+            	printf("[2] Price \n");
+            	printf("[3] Description \n");
+            	scanf("%d", &option);
+            	break;
+            }
+        }    
+    }fclose(addon);//closing addon
+    
+    switch (option) {
+    	case 1:			    		
+    		printf("Enter name:\n");
+    		scanf(" %[^\n]", newValues.name);
+    		if(editCombo(mcode, newValues) == 1){//comparing the function with the new data
+    		    printf("Meal code %s edited!\n", mcode);
+    		}else if(editAddon(mcode, newValues) == 1){
+    		    printf("Meal code %s edited!\n", mcode);
+    		}else{
+    		    printf("Invalid meal code!\n");
+    		}	
+    		break;
+    	case 2:
+    		printf("Enter price:\n");
+    		scanf(" %f", &(newValues.price));
+    		if(editCombo(mcode, newValues) == 1){//comparing the function with the new data
+    		    printf("Meal code %s edited!\n", mcode);
+    		}else if(editAddon(mcode, newValues) == 1){
+    		    printf("Meal code %s edited!\n", mcode);
+    		}else{
+    		    printf("Invalid meal code!\n");
+    		}			    		
+    		break;
+    	case 3:
+    		printf("Enter description:\n");
+    		scanf(" %[^\n]", newValues.description);
+    		if(editCombo(mcode, newValues) == 1){//comparing the function with the new data
+    		    printf("Meal code %s edited!\n", mcode);
+    		}else if(editAddon(mcode, newValues) == 1){
+    		    printf("Meal code %s edited!\n", mcode);
+    		}else{
+    		    printf("Invalid meal code!\n");
+    		}
+    		break;	
+    	default:
+    		printf("Invalid meal code!\n");
+    		break;		
+    }			    			    	
+}
+
+int editCombo(char *menuCode, struct Meal meal)
+{
+    struct Meal tmp;//declaring structure
+    int found = 0;
+    FILE *combo = fopen("combo.txt", "r");
+    FILE *temp = fopen("temp.txt", "w");//opening file    
+    while(!feof(combo)){
+    	fscanf(combo, "%[^:]:%[^:]:%f:%[^\n]\n", tmp.mcode,tmp.name,&tmp.price,tmp.description);
+        if(strcmp(menuCode, tmp.mcode)==0){//compare two values
+            fprintf(temp, "%s:%s:%.2f:%s\n", menuCode, meal.name, tmp.price, tmp.description);
+            found = 1;
+        }else{
+            fprintf(temp, "%s:%s:%.2f:%s\n", tmp.mcode, tmp.name, tmp.price, tmp.description);
+        }
+        // fscanf(combo, "%[^:]:%[^:]:%f:%[^\n]\n", tmp.mcode,tmp.name,&tmp.price,tmp.description);
+    }fclose(combo);//closing a file
+    fclose(temp);
+    remove("combo.txt");//replacing a file with another temporary file
+    rename("temp.txt", "combo.txt");
+
+    return found;
+}
+
+int editAddon(char *menuCode, struct Meal meal)//declaring function
+{
+    struct Meal tmp;//declaring structure
+    int found = 0;
+    FILE *addon = fopen("addon.txt", "r");
+    FILE *temp = fopen("temp.txt", "w");//opening file    
+    while(!feof(addon)){
+    	fscanf(addon, "%[^:]:%[^:]:%f:%[^\n]\n", tmp.mcode,tmp.name,&tmp.price,tmp.description);
+        if(strcmp(menuCode, tmp.mcode)==0){//compare two values
+            fprintf(temp, "%s:%s:%.2f:%s\n", menuCode, meal.name, meal.price, meal.description);
+            found = 1;
+        }else{
+            fprintf(temp, "%s:%s:%.2f:%s\n", tmp.mcode, tmp.name, tmp.price, tmp.description);
+        }
+        // fscanf(addon, "%[^:]:%[^:]:%f:%[^\n]\n", tmp.mcode,tmp.name,&tmp.price,tmp.description);
+    }fclose(addon);//closing a file
+    fclose(temp);
+    remove("addon.txt");//replacing a file with another temporary file
+    rename("temp.txt", "addon.txt");
+
+    return found;
+}
+
 int purchase(void){
 	char menu_code[6]; //user input meal code	
 	FILE *fptr; //flie pointer for receipt text file		
@@ -246,12 +439,10 @@ int purchase(void){
 	        {
 	            printf("Enter the quantity of the meal: ");
 	            scanf("%d",&quantity);          
-	            quantity = (quantity <= 0) ? 0 : quantity;
-	            	          
+	            quantity = (quantity <= 0) ? 0 : quantity;	            	          
 	            total = meal.price * quantity;
 	            grand_total += total;	 
-	            total_quantity += quantity;           
-	            
+	            total_quantity += quantity;           	            
 	            itemFound ++;
 	            combo_trans++;	       	            
 	            print_order(quantity, meal.name, meal.price, grand_total); 
@@ -276,12 +467,10 @@ int purchase(void){
 	            {
 	               printf("Enter the quantity of the meal: ");
 	               scanf("%d",&quantity);          
-	               quantity = (quantity <= 0) ? 0 : quantity;
-	               	          
+	               quantity = (quantity <= 0) ? 0 : quantity;	               	          
 	               total = meal.price * quantity;
 	               grand_total += total;
-	               total_quantity += quantity;	            
-	               
+	               total_quantity += quantity;	            	               
 	               itemFound ++;
 	               ala_trans++;	       	            
 	               print_order(quantity, meal.name, meal.price, grand_total); 
@@ -301,7 +490,7 @@ int purchase(void){
 	            printf("Invalid menu code!\n");
 	        }
 	        itemFound = 0;
-	        printf("Enter menu code:(-1 to end purchase)\n");
+	        printf("Please enter a meal code (-1 to exit purchase). Example: C0001.\n");
 	        scanf("%s", menu_code);
 	    };//end of while loop
 
@@ -316,7 +505,8 @@ void order(void) {
 	int order_number, ch; 
 	unsigned int c_trans = 0, a_trans = 0, cTrans, aTrans; //declared variable to store total trans values
 	float trans_total, gTotal=0;
-	char str[32];	
+	char str[32];
+	char mcode[6];	
 
 	do {
 		puts("------------------------------------");
@@ -353,14 +543,13 @@ void order(void) {
 				purchase();
 				exit(0); //exit function when 0 is returned 
 			case 2:
-				//edit_meal();
+				edit_meal();
 				break;
 			case 3:
-				add_meal();
-				// printf("This option allows user to add meals!\n");
+				add_meal();				
 				break;
 			case 4:
-				printf("This option allows user to delete meals!\n");
+				delete_meal();
 				break;
 			case 5:
 				print_menu();
