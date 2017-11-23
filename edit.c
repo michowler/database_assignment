@@ -3,8 +3,10 @@ void edit_meal(){
 	char mcode[6];
 	struct Meal newValues;//user input
 	struct Meal meal;//user input
-	FILE *combo = fopen("combo.txt", "r");
-	FILE *addon = fopen("addon.txt", "r");
+    int found = 0;
+	FILE *cptr;
+	FILE *aptr;
+    FILE *temp;
 
 	printf("----------------------------\n");//function to edit the files structure
     printf("      EDIT MEAL\n");
@@ -12,33 +14,24 @@ void edit_meal(){
     printf("Enter meal code:\n");
     scanf("%s", mcode);   
 
-    while(!feof(combo)){
-    	fscanf(combo, "%[^:]:%[^:]:%f:%[^\n]\n", meal.mcode,meal.name,&meal.price,meal.description);
-        if(strcmp(mcode, meal.mcode)==0){//compare two values
-            if (strcmp(mcode, meal.mcode)==0) {
-            	printf("Enter option (1 to 3) to edit: \n");
-            	printf("[1] Name \n");
-            	printf("[2] Price \n");
-            	printf("[3] Description \n");
-            	scanf("%d", &option);
-            	break;
-            }
-        }     
-    }fclose(combo);//closing combo
+    struct Meal tmp;
+    int found = 0;
 
-    while(!feof(addon)){
-    	fscanf(addon, "%[^:]:%[^:]:%f:%[^\n]\n", meal.mcode,meal.name,&meal.price,meal.description);
-        if(strcmp(mcode, meal.mcode)==0){//compare two values
-            if (strcmp(mcode, meal.mcode)==0) {
-            	printf("Enter option (1 to 3) to edit: \n");
-            	printf("[1] Name \n");
-            	printf("[2] Price \n");
-            	printf("[3] Description \n");
-            	scanf("%d", &option);
-            	break;
-            }
-        }    
-    }fclose(addon);//closing addon
+    cptr = fopen("combo.txt", "r");
+    temp = fopen("temp.txt", "w");
+    while(!feof(cptr)){
+        fscanf(cptr, " %[^:]:%[^:]:%f:%[^\n]\n", tmp.mcode,tmp.name,&tmp.price,tmp.description);
+        if(strcmp(menuCode, tmp.mcode)==0){//compare two values
+            fprintf(temp, "%s:%s:%.2f:%s\n", menuCode, meal.name, tmp.price, tmp.description);
+            found = 1;
+        }else{
+            fprintf(temp, "%s:%s:%.2f:%s\n", tmp.mcode, tmp.name, tmp.price, tmp.description);
+        }
+        // fscanf(combo, "%[^:]:%[^:]:%f:%[^\n]\n", tmp.mcode,tmp.name,&tmp.price,tmp.description);
+    }fclose(combo);//closing a file
+    fclose(temp);
+    remove("combo.txt");//replacing a file with another temporary file
+    rename("temp.txt", "combo.txt");
     
     switch (option) {
     	case 1:			    		
