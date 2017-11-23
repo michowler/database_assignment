@@ -102,7 +102,7 @@ void add_meal(){
 			else //else statement
 			{
 				printf("Add Combo Code:\n");
-				scanf("%s", menucode);
+				scanf(" %5s", menucode);
 				cfp = fopen("combo.txt", "r"); //open file
 				while(!feof(cfp))
 				{
@@ -139,7 +139,7 @@ void add_meal(){
 			else //else statement
 			{
 				printf("Add Addon Code:\n");
-				scanf("%s", menucode);
+				scanf(" %5s", menucode);
 				afp = fopen("addon.txt", "r"); //open file
 				while(!feof(afp))
 				{
