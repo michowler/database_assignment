@@ -74,7 +74,7 @@ void daily_trans(int combo_trans, int ala_trans, float grand_total){
 }
 
 void add_meal(){
-	int add, countC1=0,countC2=0, countA1=0, countA2=0 ;	
+	int add, countC1=0,countC2=0, countA1=0, countA2=0;	
 	struct Meal meal;	
 	char menucode[6];
 	FILE *cfptr; //pointer for combo text file to append
@@ -90,17 +90,13 @@ void add_meal(){
 	printf("-------------------------------\n");
 	scanf("%d", &add);
 	
-	switch(add) //start of switch statement
-	{
+	switch(add){
 		case 1:
 			cfptr = fopen("combo.txt", "a"); //open file
-			if(cfptr==NULL)//checking whether the file is empty or not
-			{
-				printf("File cannot be found\n");
-				
+			if(cfptr==NULL){
+				printf("File cannot be found\n");				
 			}
-			else //else statement
-			{
+			else {
 				printf("Add Combo Code:\n");
 				scanf("%s", menucode);
 				cfp = fopen("combo.txt", "r"); //open file
@@ -181,13 +177,13 @@ void delete_meal()
 	struct Meal meal;
 	int type = 0; //Not found	
 	
-    printf("----------------------------\n");//function for deleting a data in the file
+    printf("----------------------------\n");
     printf("      DELETE MEAL\n");
     printf("----------------------------\n");
     printf("Enter menu code:\n");
     scanf("%5s", mcode);//user input
 
-    cptr = fopen("combo.txt", "r");//creating a new file            
+    cptr = fopen("combo.txt", "r");
     while(!feof(cptr))
     {	    	    	
     	fscanf(cptr, " %[^:]:%[^:]:%f:%[^\n]\n", meal.mcode, meal.name, &meal.price, meal.description);
@@ -313,29 +309,29 @@ void edit_meal(){
 	printf("----------------------------\n");//function to edit the files structure
     printf("      EDIT MEAL\n");
     printf("----------------------------\n");
-    printf("Enter meal code:\n");
-    scanf("%s", mcode);   
+    printf("Enter meal code: \n");
+    scanf("%s", mcode);    
 
-    cptr = fopen("combo.txt", "r");//creating a new file            
-    while(!feof(cptr))
-    {                   
-        fscanf(cptr, "%[^:]:%[^:]:%f:%[^\n]", meal.mcode, meal.name, &meal.price, meal.description);
-        if(strcmp(mcode, meal.mcode) == 0)
-        {
+    cptr = fopen("combo.txt", "r");
+    rewind(cptr);
+    while(!feof(cptr)){                   
+        fscanf(cptr, " %[^:]:%[^:]:%f:%[^\n]", meal.mcode, meal.name, &meal.price, meal.description);
+        if(strcmp(mcode, meal.mcode) == 0){
             found = 1; //combo
         }       
-    }fclose(cptr);
+    }
+    fclose(cptr);
     
-    if(found == 0){
-        aptr = fopen("addon.txt", "r");                
-        while(!feof(aptr))
-        {
-            fscanf(aptr, "%[^:]:%[^:]:%f:%[^\n]", meal.mcode, meal.name, &meal.price, meal.description);
-            if(strcmp(mcode, meal.mcode) == 0)
-            {
-                found = 2; //addon
-            }            
-        }fclose(aptr);
+    if(found == 0){ //addon
+        aptr = fopen("addon.txt", "r");
+        rewind(aptr);                
+        while(!feof(aptr)){
+            fscanf(aptr, " %[^:]:%[^:]:%f:%[^\n]", meal.mcode, meal.name, &meal.price, meal.description);
+            if(strcmp(mcode, meal.mcode) == 0){
+                found = 2; 
+            }
+        }
+        fclose(aptr);
     }
 
     if (found > 0){
@@ -345,7 +341,7 @@ void edit_meal(){
         printf("[3] Description \n");
         scanf("%d", &option);
     } else {
-    	printf("The menu code of %s does not exist!\n", mcode);
+    	printf("The menu code of %s does not exist. Please add meal of %s!\n", mcode, mcode);
     }
 
     switch(found){
@@ -377,8 +373,7 @@ void edit_meal(){
                     }                                        
                 }else {
                     fprintf(temp, "%s:%s:%.2f:%s\n", tmp.mcode, tmp.name, tmp.price, tmp.description);
-                }
-                // fscanf(combo, "%[^:]:%[^:]:%f:%[^\n]\n", tmp.mcode,tmp.name,&tmp.price,tmp.description);
+                }                
             }fclose(cptr);//closing a file
             fclose(temp);
             remove("combo.txt");//replacing a file with another temporary file
@@ -412,14 +407,13 @@ void edit_meal(){
                     }                                        
                 }else {
                     fprintf(temp, "%s:%s:%.2f:%s\n", tmp.mcode, tmp.name, tmp.price, tmp.description);
-                }
-                // fscanf(combo, "%[^:]:%[^:]:%f:%[^\n]\n", tmp.mcode,tmp.name,&tmp.price,tmp.description);
-            }fclose(cptr);//closing a file
+                }                
+            }fclose(aptr);//closing a file
             fclose(atemp);
-            remove("combo.txt");//replacing a file with another temporary file
-            rename("atemp.txt", "combo.txt"); 
+            remove("addon.txt");//replacing a file with another temporary file
+            rename("atemp.txt", "addon.txt"); 
             break;
-        default:
+        default:        	
             break;    
     }
 }
