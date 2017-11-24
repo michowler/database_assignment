@@ -372,10 +372,11 @@ void edit_meal(){
                             fprintf(temp, "%s:%s:%.2f:%s\n", mcode, tmp.name, tmp.price, newValues.description);
                             break;
                         default:
+	                        printf("Invalid option to edit!\n");
                             break;    
                     }                                        
-                }else (strcmp(mcode, tmp.mcode)!=0){
-                    fprintf(cptr, "%s:%s:%.2f:%s\n", tmp.mcode, tmp.name, tmp.price, tmp.description);
+                }else {
+                    fprintf(temp, "%s:%s:%.2f:%s\n", tmp.mcode, tmp.name, tmp.price, tmp.description);
                 }
                 // fscanf(combo, "%[^:]:%[^:]:%f:%[^\n]\n", tmp.mcode,tmp.name,&tmp.price,tmp.description);
             }fclose(cptr);//closing a file
@@ -406,10 +407,11 @@ void edit_meal(){
                             fprintf(temp, "%s:%s:%.2f:%s\n", mcode, tmp.name, tmp.price, newValues.description);
                             break;
                         default:
+	                        printf("Invalid option to edit!\n");
                             break;    
                     }                                        
-                }else (strcmp(mcode, tmp.mcode)!=0){
-                    fprintf(aptr, "%s:%s:%.2f:%s\n", tmp.mcode, tmp.name, tmp.price, tmp.description);
+                }else {
+                    fprintf(temp, "%s:%s:%.2f:%s\n", tmp.mcode, tmp.name, tmp.price, tmp.description);
                 }
                 // fscanf(combo, "%[^:]:%[^:]:%f:%[^\n]\n", tmp.mcode,tmp.name,&tmp.price,tmp.description);
             }fclose(cptr);//closing a file
