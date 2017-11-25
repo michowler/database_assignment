@@ -1,6 +1,6 @@
-A0001:Salad Barking:3.99:Any soft drink
-A0002:Salad:3.99:Without nut
-A0003:Burger:6.99: Chicken or beef
-A0004:Fried chicken 1 piece:4.99:Original or Cheese
-A0005:Fried chicken 2 pieces:8.99:Original or cheese
-A0006:Get ready!:4.24:juice workes
+
+C0001:Red pack:4.65:the one
+
+C00004:Honey moon:5.62:like
+
+C0001:hey:4.64:kfdlhg
