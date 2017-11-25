@@ -73,6 +73,57 @@ void daily_trans(int combo_trans, int ala_trans, float grand_total){
 	puts("------------------------------------");
 }
 
+int print_menu(void) //function to display menu
+{
+	struct Meal meal;	
+	int c, d;	
+	FILE *cfp; //pointer for combo txt file
+	FILE *afp; //pointer for addon txt file      
+
+	puts("------------------------------------------------------------------------------------------------------");
+	puts("----------------------------------------COMBO MEALS---------------------------------------------------");
+	puts("------------------------------------------------------------------------------------------------------");
+	printf("%-16s%-24s%-19s%-18s\n\n","Menu Code","Meal Name","Meal Price(RM)","Meal Description");
+	if ((cfp = fopen("combo.txt", "r"))== NULL){
+	   puts("File could not be found!");
+	} else {
+		c = fgetc(cfp);
+		if (c == EOF) {
+		    printf("No combo meals available!\n"); //print error message if file is empty
+		} else {
+			ungetc(c, cfp);	
+			while(!feof(cfp)){
+				fscanf(cfp, "%[^:]:%[^:]:%f:%[^\n]\n", meal.mcode,meal.name,&meal.price,meal.description);			
+				printf("%-15s%-27s%-17.2f%-12s\n", meal.mcode,meal.name,meal.price,meal.description);			
+			}  
+		}  
+	} 
+	puts("----------------------------------------------------------------------------------------------------\n");
+	fclose(cfp); //close the file   
+
+	puts("------------------------------------------------------------------------------");
+	puts(" -----------------------------------ADD-ONS---------------------------------- ");
+	puts("------------------------------------------------------------------------------");
+	printf("%-16s%-24s%-19s%-18s\n\n","Menu Code","Meal Name","Meal Price(RM)","Meal Description");
+	if ((afp = fopen("addon.txt", "r"))== NULL){
+	   puts("File could not be found!");
+	} else {
+		d = fgetc(afp);
+		if (d == EOF) {
+		    printf("No addon meals available!\n");	
+		} else {
+			ungetc(d, afp);	
+			while(!feof(afp)){
+				fscanf(afp, "%[^:]:%[^:]:%f:%[^\n]\n", meal.mcode,meal.name,&meal.price,meal.description);			
+				printf("%-15s%-27s%-17.2f%-12s\n", meal.mcode,meal.name,meal.price,meal.description);			
+			}    
+		}		
+	}  
+	puts("------------------------------------------------------------------------------");
+	fclose(afp); //close txt file
+	return 0;
+}
+
 void add_meal(){
 	int add, countC1=0,countC2=0, countA1=0, countA2=0;	
 	struct Meal meal;	
@@ -120,7 +171,8 @@ void add_meal(){
 					printf("Enter combo description: \n");
 					scanf(" %[^\n]", meal.description);
 					fprintf(cfptr,"\n%s:%s:%.2f:%s\n",menucode,meal.name,meal.price,meal.description);	
-				}										
+				}
+				printf("Meal %s successfully added!\n", menucode);
 			}//end else statement
 			fclose(cfptr);
 			break;		
@@ -151,7 +203,8 @@ void add_meal(){
 					printf("Enter addon description: \n");
 					scanf(" %[^\n]", meal.description);
 					fprintf(afptr,"\n%s:%s:%.2f:%s\n",menucode,meal.name,meal.price,meal.description);
-				}														
+				}
+				printf("Meal %s successfully added!\n", menucode);
 			}//end else statement
 			fclose(afptr);
 			break;	
@@ -313,7 +366,7 @@ void edit_meal(){
                             fprintf(temp, "%s:%s:%.2f:%s\n", mcode, tmp.name, newValues.price, tmp.description);
                             break;
                         case 3:
-                            printf("Enter a new description %s: \n", mcode);
+                            printf("Enter a new description for %s: \n", mcode);
                             scanf(" %[^\n]", newValues.description);
                             fprintf(temp, "%s:%s:%.2f:%s\n", mcode, tmp.name, tmp.price, newValues.description);                                                                         
                             break;
@@ -368,57 +421,6 @@ void edit_meal(){
         default:        	
             break;    
     }
-}
-
-int print_menu(void) //function to display menu
-{
-	struct Meal meal;	
-	int i, c, d, size;	
-	FILE *cfp; //pointer for combo txt file
-	FILE *afp; //pointer for addon txt file      
-
-	puts("------------------------------------------------------------------------------------------------------");
-	puts("----------------------------------------COMBO MEALS---------------------------------------------------");
-	puts("------------------------------------------------------------------------------------------------------");
-	printf("%-16s%-24s%-19s%-18s\n\n","Menu Code","Meal Name","Meal Price(RM)","Meal Description");
-	if ((cfp = fopen("combo.txt", "r"))== NULL){
-	   puts("File could not be found!");
-	} else {
-		c = fgetc(cfp);
-		if (c == EOF) {
-		    printf("No combo meals available!\n"); //print error message if file is empty
-		} else {
-			ungetc(c, cfp);	
-			while(!feof(cfp)){
-				fscanf(cfp, "%[^:]:%[^:]:%f:%[^\n]\n", meal.mcode,meal.name,&meal.price,meal.description);			
-				printf("%-15s%-27s%-17.2f%-12s\n", meal.mcode,meal.name,meal.price,meal.description);			
-			}  
-		}  
-	} 
-	puts("----------------------------------------------------------------------------------------------------\n");
-	fclose(cfp); //close the file   
-
-	puts("------------------------------------------------------------------------------");
-	puts(" -----------------------------------ADD-ONS---------------------------------- ");
-	puts("------------------------------------------------------------------------------");
-	printf("%-16s%-24s%-19s%-18s\n\n","Menu Code","Meal Name","Meal Price(RM)","Meal Description");
-	if ((afp = fopen("addon.txt", "r"))== NULL){
-	   puts("File could not be found!");
-	} else {
-		d = fgetc(afp);
-		if (d == EOF) {
-		    printf("No addon meals available!\n");	
-		} else {
-			ungetc(d, afp);	
-			while(!feof(afp)){
-				fscanf(afp, "%[^:]:%[^:]:%f:%[^\n]\n", meal.mcode,meal.name,&meal.price,meal.description);			
-				printf("%-15s%-27s%-17.2f%-12s\n", meal.mcode,meal.name,meal.price,meal.description);			
-			}    
-		}		
-	}  
-	puts("------------------------------------------------------------------------------");
-	fclose(afp); //close txt file
-	return 0;
 }
 
 int purchase(void){
@@ -529,9 +531,9 @@ void order(void) {
 		printf("Please enter order option (1-7): "); 
 		scanf("%d", &order_number);		
 		
-		while (order_number > 7 || order_number < 1) { //validation of user input			
-			printf("Please enter a valid order option (1-7): ");
-		    if (scanf("%d", &order_number) < 0 || order_number < 0 || ((ch = getchar()) != EOF && ch != '\n')) {		             
+		while (order_number > 7 || order_number < 1) { //validation of user input
+		    if (scanf("%d", &order_number) < 0 || order_number < 0 || ((ch = getchar()) != EOF && ch != '\n')) {
+		    	printf("Please enter a valid order option (1-7): ");
 		        clearerr(stdin);
 		        do
 		            ch = getchar();
