@@ -9,15 +9,14 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 
 struct Meal {
-	char mcode[6], name[50], description[80];
+	char mcode[6], name[100], description[100];
 	float price;
 };
 
 //prototype of functions used
-int print_menu(), purchase();
+int print_menu(), purchase(),clean_stdin();
 void add_meal(), order();
 void daily_trans(int combo_trans, int ala_trans, float grand_total),print_order(int quantity, char *item, float price, float total);
 void print_receipt(int combo_trans, int ala_trans, int total_quantity, float total);
@@ -40,7 +39,7 @@ void print_order(int quantity, char *item, float price, float total) {
 //function to print_receipt at the end (-1) of purchase 
 void print_receipt(int combo_trans, int ala_trans, int total_quantity, float total){
 	FILE *fp; //pointer for receipt txt file
-	int i, trans; 	
+	int i, trans;
 	char text_file[200];
 
 	fp = fopen("receipt.txt", "r"); 	
@@ -82,7 +81,7 @@ int print_menu(void) //function to display menu
 	FILE *afp; //pointer for addon txt file      
 
 	puts("------------------------------------------------------------------------------------------------------");
-	puts("-------------------------------------------COMBO MEALS------------------------------------------------");
+	puts("----------------------------------------COMBO MEALS---------------------------------------------------");
 	puts("------------------------------------------------------------------------------------------------------");
 	printf("%-16s%-24s%-19s%-18s\n\n","Menu Code","Meal Name","Meal Price(RM)","Meal Description");
 	if ((cfp = fopen("combo.txt", "r"))== NULL){
@@ -90,7 +89,7 @@ int print_menu(void) //function to display menu
 	} else {
 		c = fgetc(cfp);
 		if (c == EOF) {
-		    printf("No combo meals available!\n"); //print error message if file is found but empty
+		    printf("No combo meals available!\n"); //print error message if file is empty
 		} else {
 			ungetc(c, cfp);	
 			while(!feof(cfp)){
@@ -102,9 +101,9 @@ int print_menu(void) //function to display menu
 	puts("----------------------------------------------------------------------------------------------------\n");
 	fclose(cfp); //close the file   
 
-	puts("------------------------------------------------------------------------------------------------------");
-	puts(" ----------------------------------------------ADD-ON MEALS------------------------------------------- ");
-	puts("------------------------------------------------------------------------------------------------------");
+	puts("------------------------------------------------------------------------------");
+	puts(" -----------------------------------ADD-ONS---------------------------------- ");
+	puts("------------------------------------------------------------------------------");
 	printf("%-16s%-24s%-19s%-18s\n\n","Menu Code","Meal Name","Meal Price(RM)","Meal Description");
 	if ((afp = fopen("addon.txt", "r"))== NULL){
 	   puts("File could not be found!");
@@ -120,15 +119,15 @@ int print_menu(void) //function to display menu
 			}    
 		}		
 	}  
-	puts("----------------------------------------------------------------------------------------------------\n");
+	puts("------------------------------------------------------------------------------");
 	fclose(afp); //close txt file
 	return 0;
 }
 
 void add_meal(){
-	int add, countC1=0,countC2=0, countA1=0, countA2=0;		
-	char menucode[6], menu_code[6];
-	struct Meal meal;
+	int add, countC1=0,countC2=0, countA1=0, countA2=0;	
+	struct Meal meal;	
+	char menucode[6];
 	FILE *cfptr; //pointer for combo text file to append
 	FILE *cfp; //pointer for combo text file to write	
 	FILE *afptr; //pointer for addon text file to append
@@ -152,49 +151,28 @@ void add_meal(){
 			}
 			else {
 				printf("Add Combo Code:\n");
-				scanf("%s", menucode);				
-				while (menucode[5] != '\0') { //validate the length of the menu code
-					if (menucode[5] == '\0') {
-						menucode[0] = toupper(menucode[0]);	//if user enter lowercase
-					}else {
-						printf("Invalid length menu code! Ex: C0001\n");
-						printf("Add Combo Code:\n");
-						scanf("%s", menucode);
-						menucode[0] = toupper(menucode[0]);
-					}								
-				}
-				menucode[0] = toupper(menucode[0]);
+				scanf("%s", menucode);
 				cfp = fopen("combo.txt", "r");
 				while(!feof(cfp)){
 				    fscanf(cfp, " %5[^:]:%[^:]:%f:%[^\n]\n", meal.mcode, meal.name, &meal.price, meal.description);  
 					while(strcmp(menucode, meal.mcode) == 0){		     
-			            printf("Invalid, menu code %s existed!\n", menucode);
-			            printf("Add Combo Code:\n");
-			            scanf("%s", menucode);
-			            menucode[0] = toupper(menucode[0]);
-			            while (menucode[5] != '\0') { //validate the length of the string
-				           	if (menucode[5] == '\0') {
-				           		menucode[0] = toupper(menucode[0]);	//if user enter lowercase
-				           	}else {
-				           		printf("Invalid length menu code! Ex: C0001\n");
-				           		printf("Add Combo Code:\n");
-				           		scanf("%s", menucode);
-				           	}								
-			            }
-			            ++countC2;
+			           printf("Invalid, menu code %s existed!\n", menucode);
+			           printf("Add Combo Code:\n");
+			           scanf("%s", menucode);
+			           ++countC2;
 					} 					
 				}
 				fclose(cfp);
-				if(countC1 == 0 || countC2 > 0 ){ //if found in combo
+				if(countC1 == 0 || countC2 > 0 ){
 					printf("Enter combo name: \n");				
 					scanf(" %[^\n]", meal.name);
 					printf("Enter combo price: \n");
 					scanf(" %f", &(meal.price));
 					printf("Enter combo description: \n");
 					scanf(" %[^\n]", meal.description);
-					fprintf(cfptr," \n%.5s:%s:%.2f:%s\n",menucode,meal.name,meal.price,meal.description);	
+					fprintf(cfptr," \n%s:%s:%.2f:%s\n",menucode,meal.name,meal.price,meal.description);	
 				}
-				printf("Meal %.5s successfully added!\n", menucode);
+				printf("Meal %s successfully added!\n", menucode);
 			}//end else statement
 			fclose(cfptr);
 			break;		
@@ -205,47 +183,28 @@ void add_meal(){
 			}
 			else{
 				printf("Add Addon Code:\n");
-				scanf("%s", menucode);				
-				while (menucode[5] != '\0') {
-					if (menucode[5] == '\0') {
-						menucode[0] = toupper(menucode[0]);	
-					}else {
-						printf("Invalid length menu code! Ex: C0001\n");
-						printf("Add Addon Code:\n");
-						scanf("%s", menucode);						
-					}								
-				}
-				menucode[0] = toupper(menucode[0]);
+				scanf("%s", menucode);
 				afp = fopen("addon.txt", "r"); //open file
 				while(!feof(afp)){
 				    fscanf(afp, " %5[^:]:%[^:]:%f:%[^\n]\n", meal.mcode, meal.name, &meal.price, meal.description);  
 					if(strcmp(menucode, meal.mcode) == 0){		     
-			            printf("Invalid, menu code %s existed!\n", menucode);
-			            printf("Add Addon Code:\n");
-			            scanf("%s", menucode);
-                        while (menucode[5] != '\0') { //validate the length of the string
-	           	           	if (menucode[5] == '\0') {
-	           	           		menucode[0] = toupper(menucode[0]);	//if user enter lowercase
-	           	           	}else {
-	           	           		printf("Invalid length menu code! Ex: C0001\n");
-	           	           		printf("Add Combo Code:\n");
-	           	           		scanf("%s", menucode);
-	           	           	}								
-                        }
+			           printf("Invalid, menu code %s existed!\n", menucode);
+			           printf("Add Addon Code:\n");
+			           scanf("%s", menucode);
 			           ++countA2;     			           			           		              			           
 					} 					
 				}
 				fclose(afp);
-				if(countA1 == 0 || countA2 > 0 ){ //if not found in combo
+				if(countA1 == 0 || countA2 > 0 ){
 					printf("Enter addon name: \n");					
 					scanf(" %[^\n]", meal.name);
 					printf("Enter addon price: \n");
 					scanf(" %f", &(meal.price));
 					printf("Enter addon description: \n");
 					scanf(" %[^\n]", meal.description);
-					fprintf(afptr," \n%.5s:%s:%.2f:%s\n",menucode,meal.name,meal.price,meal.description);
+					fprintf(afptr," \n%s:%s:%.2f:%s\n",menucode,meal.name,meal.price,meal.description);
 				}
-				printf("Meal %.5s successfully added!\n", menucode);
+				printf("Meal %s successfully added!\n", menucode);
 			}//end else statement
 			fclose(afptr);
 			break;	
@@ -264,15 +223,13 @@ void delete_meal(){
 	FILE *aptr;	
 	char mcode[6];
 	struct Meal meal;
-	int type = 0; //to find combo type or addon type
+	int type = 0; //Not found	
 	
     printf("--------------------------\n");
     printf("     DELETE MEAL\n");
     printf("--------------------------\n");
     printf("Enter menu code, example C0001. (-1 to exit)\n");
     scanf("%s", mcode);
-    mcode[0] = toupper(mcode[0]);
-
     if (strcmp(mcode, "-1") == 0){
     	order();
     }
@@ -299,7 +256,7 @@ void delete_meal(){
 
     switch(type){ 
         case 1:           
-            dtemp = fopen("deletetemp.txt", "w");//opening temp file to write in new file.            
+            dtemp = fopen("deletetemp.txt", "w");//opening file for write.            
             cptr = fopen("combo.txt", "r");
             while(!feof(cptr)){
                 fscanf(cptr, " %[^:]:%[^:]:%f:%[^\n]\n", meal.mcode, meal.name, &meal.price, meal.description);
@@ -308,8 +265,8 @@ void delete_meal(){
                 }               
             }
             fclose(cptr);
-            remove("combo.txt");//removing temp file 
-            rename("deletetemp.txt", "combo.txt");//replacing it with original            
+            remove("combo.txt");//removing one file and replacing it with another
+            rename("deletetemp.txt", "combo.txt");
             fclose(dtemp);//file close
             printf("%s successfully deleted!\n", mcode);
 	        break;
@@ -324,7 +281,7 @@ void delete_meal(){
             }
             fclose(aptr);
             remove("addon.txt");
-            rename("deletetemp.txt", "addon.txt");            
+            rename("deletetemp.txt", "addon.txt");
             fclose(dtemp);
             printf("%s successfully deleted!\n", mcode);
 	        break;
@@ -352,8 +309,6 @@ void edit_meal(){
     printf("----------------------\n");
     printf("Enter menu code to edit, example C0001. (-1 to exit) \n");
     scanf("%s", mcode);
-    mcode[0] = toupper(mcode[0]);
-
     if (strcmp(mcode, "-1") == 0){
     	order();
     }
@@ -405,7 +360,7 @@ void edit_meal(){
                             scanf(" %[^\n]", newValues.name);
                             printf("Confirm edit? Please enter 1 or 2. [1] yes [2] no \n");
                             scanf("%d", &confirmStatus);
-                            (confirmStatus != 1) || (confirmStatus == 2) ? printf("Nothing was edited.\n") : printf("");
+                            (confirmStatus != 1) && (confirmStatus == 2) ? printf("Nothing was edited.\n") : printf("");
                             (confirmStatus == 1) ? fprintf(temp, "%s:%s:%.2f:%s\n", mcode, newValues.name, tmp.price, tmp.description) : order();
                             break;
                         case 2:
@@ -413,7 +368,7 @@ void edit_meal(){
                             scanf(" %f", &(newValues.price));
                             printf("Confirm edit? Please enter 1 or 2. [1] yes [2] no \n");
                             scanf("%d", &confirmStatus);
-                            (confirmStatus != 1) || (confirmStatus == 2) ? printf("Nothing was edited.\n") : printf("");
+                            (confirmStatus != 1) && (confirmStatus == 2) ? printf("Nothing was edited.\n") : printf("");
                             (confirmStatus == 1) ? fprintf(temp, "%s:%s:%.2f:%s\n", mcode, tmp.name, newValues.price, tmp.description) : order();
                             break;
                         case 3:
@@ -421,7 +376,7 @@ void edit_meal(){
                             scanf(" %[^\n]", newValues.description);
                             printf("Confirm edit? Please enter 1 or 2. [1] yes [2] no \n");
                             scanf("%d", &confirmStatus);
-                            (confirmStatus != 1) || (confirmStatus == 2) ? printf("Nothing was edited.\n") : printf("");
+                            (confirmStatus != 1) && (confirmStatus == 2) ? printf("Nothing was edited.\n") : printf("");
                             (confirmStatus == 1) ? fprintf(temp, "%s:%s:%.2f:%s\n", mcode, tmp.name, tmp.price, newValues.description) : order();                                                        
                             break;
                         default:
@@ -449,7 +404,7 @@ void edit_meal(){
                             scanf(" %[^\n]", newValues.name);
                             printf("Confirm edit? Please enter 1 or 2. [1] yes [2] no \n");
                             scanf("%d", &confirmStatus);
-                            (confirmStatus != 1) || (confirmStatus == 2) ? printf("Nothing was edited.\n") : printf("");
+                            (confirmStatus != 1) && (confirmStatus == 2) ? printf("Nothing was edited.\n") : printf("");
                             (confirmStatus == 1) ? fprintf(atemp, "%s:%s:%.2f:%s\n", mcode, newValues.name, tmp.price, tmp.description) : order();                            
                             break;
                         case 2:
@@ -457,16 +412,16 @@ void edit_meal(){
                             scanf(" %f", &(newValues.price));
                             printf("Confirm edit? Please enter 1 or 2. [1] yes [2] no \n");
                             scanf("%d", &confirmStatus);
-                            (confirmStatus != 1) || (confirmStatus == 2) ? printf("Nothing was edited.\n") : printf("");
-                            (confirmStatus == 1) ? fprintf(atemp, "%s:%s:%.2f:%s\n", mcode, tmp.name, newValues.price, tmp.description) : order();
+                            (confirmStatus != 1) && (confirmStatus == 2) ? printf("Nothing was edited.\n") : printf("");
+                            (confirmStatus == 1) ? fprintf(temp, "%s:%s:%.2f:%s\n", mcode, tmp.name, newValues.price, tmp.description) : order();
                             break;
                         case 3:
                             printf("Enter a new description for %s: \n", mcode);
                             scanf(" %[^\n]", newValues.description);
                             printf("Confirm edit? Please enter 1 or 2. [1] yes [2] no \n");
                             scanf("%d", &confirmStatus);
-                            (confirmStatus != 1) || (confirmStatus == 2) ? printf("Nothing was edited.\n") : printf("");
-                            (confirmStatus == 1) ? fprintf(atemp, "%s:%s:%.2f:%s\n", mcode, tmp.name, tmp.price, newValues.description) : order();
+                            (confirmStatus != 1) && (confirmStatus == 2) ? printf("Nothing was edited.\n") : printf("");
+                            (confirmStatus == 1) ? fprintf(temp, "%s:%s:%.2f:%s\n", mcode, tmp.name, tmp.price, newValues.description) : order();
                             break;
                         default:
 	                        printf("Invalid option to edit!\n");
@@ -489,82 +444,90 @@ void edit_meal(){
 int purchase(void){
 	char menu_code[6]; //user input meal code	
 	FILE *fptr; //flie pointer for receipt text file		
-	FILE *rfptr; //flie pointer for receipt text file		
 	FILE *tfptr; //flie pointer for trans text file	
 	FILE *mfptr; //flie pointer for combo text file
 	FILE *afptr; //flie pointer for addon text file
 	int quantity=0, itemFound=0,total_quantity=0; 	
 	float total=0, grand_total=0;
-	unsigned int combo_trans=0, ala_trans=0;
+	unsigned int combo_trans=0, ala_trans=0, i;
 	struct Meal meal;	
 
-	printf("Please enter a menu code (-1 to exit purchase). Example: C0001.\n");
-	scanf("%s", menu_code);
-	menu_code[0] = toupper(menu_code[0]);
+	fptr = fopen("receipt.txt", "w"); //clear file before appending for purchase		
+	while(strcmp(menu_code, "-1") != 0) {	//while user's meal code is not sentinel value -1
+		itemFound=0;
+		printf("Please enter a meal code (-1 to exit purchase). Example: C0001.\n");		
+		scanf("%s", menu_code);
+		
+		tfptr = fopen("trans.txt", "a"); //open for appending by case
+		if (strcmp(menu_code, "-1") == 0){	
+			print_receipt(combo_trans, ala_trans, total_quantity, grand_total);	
+			order(); //when input sentinel value then print receipt and go back to main page			
+		} 		
+		else if (itemFound == 0){
+			printf("Enter quantity of order. \n");
+			scanf("%d", &quantity);		
+			quantity = (quantity <= 0) ? 0 : quantity;  // to prevent neg value
 
-	rfptr = fopen("receipt.txt", "w"); //clear file before appending for each purchase		
-	fclose(rfptr);
+			mfptr = fopen("combo.txt", "r");//command to open a specific file
+			while(!feof(mfptr))
+			{
+			    fscanf(mfptr, "%5[^:]:%[^:]:%f:%[^\n]\n", meal.mcode, meal.name, &meal.price, meal.description);    
+			    if(strcmp(menu_code, meal.mcode) == 0)
+			    {
+			        // printf("Enter the quantity of the meal: ");
+			        // scanf("%d",&quantity);          
+			        // quantity = (quantity <= 0) ? 0 : quantity; //accepting valid values for quantity            	          
+			        total = meal.price * quantity;
+			        grand_total += total;	 
+			        total_quantity += quantity;         	            
+			        itemFound ++;
+			        combo_trans++;	       	            
+			        print_order(quantity, meal.name, meal.price, grand_total); 
 
-	while(strcmp(menu_code, "-1") != 0)//while loop to compare the input with sentinel value
-	{		        		
-		tfptr = fopen("trans.txt", "a");
-		fptr = fopen("receipt.txt", "a");
-
-	    mfptr = fopen("combo.txt", "r");//command to open a specific file
-	    while(!feof(mfptr))
-	    {
-	        fscanf(mfptr, " %5[^:]:%[^:]:%f:%[^\n]\n", meal.mcode, meal.name, &meal.price, meal.description);    
-	        if(strcmp(menu_code, meal.mcode) == 0)
-	        {	                     	
-		        printf("Enter the quantity of the meal: ");
-		        scanf("%d",&quantity);          
-		        quantity = (quantity <= 0) ? 0 : quantity; //accepting valid values for quantity          
-	            total = meal.price * quantity;
-	            grand_total += total;	 
-	            total_quantity += quantity;         	            
-	            itemFound ++;
-	            combo_trans++;	       	            
-	            print_order(quantity, meal.name, meal.price, grand_total); 	            
-	            fprintf(tfptr, "%u:%u:%.2f\n", quantity, 0, total); 	            	            
-	            fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal.name, meal.price*quantity);	            	            
-	        }
-	    }fclose(mfptr);//closes the file after execution
-
-		if(itemFound == 0)//start of if statement
-	    {
+			        tfptr = fopen("trans.txt", "a+");
+			        fprintf(tfptr, "%u:%u:%.2f\n", quantity, 0, total); 
+			        fclose(tfptr);
+			        fptr = fopen("receipt.txt", "a+");
+			        fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal.name, meal.price*quantity);
+			        fclose(fptr);
+			        
+			    }
+			}fclose(mfptr);//closes the file after execution
+		} 
+		else if (itemFound == 0) {
+			printf("Enter quantity of order. \n");
+			scanf("%d", &quantity); 		
+			quantity = (quantity <= 0) ? 0 : quantity;
+							
 			afptr = fopen("addon.txt", "r");
 			while(!feof(afptr))
 			{
-			    fscanf(afptr, " %5[^:]:%[^:]:%f:%[^\n]\n", meal.mcode, meal.name, &meal.price, meal.description);  
+			    fscanf(afptr, "%5[^:]:%[^:]:%f:%[^\n]\n", meal.mcode, meal.name, &meal.price, meal.description);  
 				if(strcmp(menu_code, meal.mcode) == 0)
-	            {	         
-		            printf("Enter the quantity of the meal: ");
-		            scanf("%d",&quantity);          
-		            quantity = (quantity <= 0) ? 0 : quantity; //accepting valid values for quantity     	               	          
-					total = meal.price * quantity;
-					grand_total += total;
-					total_quantity += quantity;	            	               
-					itemFound ++;
-					ala_trans++;	       	            
-					print_order(quantity, meal.name, meal.price, grand_total); 	               
-					fprintf(tfptr, "%u:%u:%.2f\n", 0, quantity, total); 	               	               
-					fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal.name, meal.price*quantity);	               
+	            {
+	               // printf("Enter the quantity of the meal: ");
+	               // scanf("%d",&quantity);          
+	               // quantity = (quantity <= 0) ? 0 : quantity;	               	          
+	               total = meal.price * quantity;
+	               grand_total += total;
+	               total_quantity += quantity;	            	               
+	               itemFound ++;
+	               ala_trans++;	       	            
+	               print_order(quantity, meal.name, meal.price, grand_total); 
+
+	               tfptr = fopen("trans.txt", "a+");
+	               fprintf(tfptr, "%u:%u:%.2f\n", 0, quantity, total); 
+	               fclose(tfptr);
+	               fptr = fopen("receipt.txt", "a+");
+	               fprintf(fptr, "%-15u%-34s%-17.2f\n", quantity, meal.name, meal.price*quantity);
+	               fclose(fptr);
 				}
-			}fclose(afptr);
-		}//end of if statement
-		
-		if(itemFound == 0){
-	        printf("Invalid menu code!\n");
-	    }
-	    fclose(fptr);
-	    fclose(tfptr);	    
-        itemFound = 0;
-        printf("Please enter a menu code (-1 to exit purchase). Example: C0001.\n");
-        scanf("%s", menu_code);
-        menu_code[0] = toupper(menu_code[0]);
-	};//end of while loop		
-	print_receipt(ala_trans, combo_trans, total_quantity, grand_total);
-	order();
+			}fclose(afptr);																					
+		} else {			
+			printf("Invalid item. \n");
+		} //end else for menu option A or C		                				
+        fclose(tfptr); //close the trans file	
+	} //end of while loop
 	return 0;
 }
 
