@@ -138,7 +138,7 @@ void add_meal(){
 	printf("    ADD MEAL\n");
 	printf("---------------------\n");	
 	printf("[1] Combo Menu\n");
-	printf("[2] Ala Carte Menu\n");
+	printf("[2] Addon Menu\n");
 	printf("[3] Exit\n");
 	printf("----------------------\n");
 	printf("Choose an option 1 or 2 to add meal.\n");
@@ -578,7 +578,7 @@ void order(void) {
 
 	do {
 		puts("------------------------------------");
-		puts("Fast Food Ordering System");
+		puts(" Fast Food Ordering System");
 		puts("------------------------------------");
 		puts("1. Purchase");
 		puts("2. Edit Meal");

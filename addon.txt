@@ -1,5 +1,0 @@
-A0001:Soft drink:3.99:Any soft drink
-A0002:Salad:3.99:Without nut
-A0003:Burger:6.99: Chicken or beef
-A0004:Fried chicken 1 piece:4.99:Original or Cheese
-A0005:Fried chicken 2 pieces:8.99:Original or cheese
