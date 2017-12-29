@@ -1,4 +1,4 @@
-
+//created by Michelle Ler
 //prototype of libraries used
 #include <stdio.h> 
 #include <stdlib.h>

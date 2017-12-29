@@ -1,9 +1,4 @@
-/*------------------------------------------------------------------- */
-/* ITS62804– Assignment #1 */
-/* Principles of Programming */
-/* Student Name: <Michelle Ler Hsin Yee>, <Vikneesh a/l Ganesan> */
-/* Student ID: <0333120>, <0324370> */
-/*------------------------------------------------------------------- */
+// end of Assignment 1
 
 //prototype of libraries used
 #include <stdio.h> 
